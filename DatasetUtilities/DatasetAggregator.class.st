@@ -50,7 +50,8 @@ DatasetAggregator >> aggregate: bulkCollection [
 
 	^ result"
 
-	^ self aggregateStream: (ReadStream on: bulkCollection)
+	^ self reifyValues:
+		  (self aggregateStream: (ReadStream on: bulkCollection))
 ]
 
 { #category : #api }
@@ -88,7 +89,7 @@ DatasetAggregator >> aggregateJSON: bulkCollection [
 DatasetAggregator >> aggregateStream: readStream [
 
 	| result |
-	[readStream atEnd] whileFalse: [ 
+	[ readStream atEnd ] whileFalse: [ 
 		| each key |
 		each := readStream next.
 		key := keyBlock value: each when.
@@ -98,7 +99,6 @@ DatasetAggregator >> aggregateStream: readStream [
 	aggregation associationsDo: [ :each | 
 		each value at: #when put: each key printString.
 		result add: each ].
-
 
 	^ result
 ]
@@ -134,6 +134,19 @@ DatasetAggregator >> averageAggregationBlock [
 			  outReg at: key put: { 
 					  value.
 					  1 } ].
+	  outReg ]
+]
+
+{ #category : #private }
+DatasetAggregator >> collateAggregationBlock [
+
+	^ [ :bulk :outReg :key | 
+	  | value |
+	  value := bulk perform: key.
+	  outReg
+		  at: key
+		  ifPresent: [ :v | outReg at: key put: v , ' ' , value ]
+		  ifAbsent: [ outReg at: key put: value ].
 	  outReg ]
 ]
 
@@ -218,6 +231,17 @@ DatasetAggregator >> minAggregationBlock [
 			ifPresent: [ :v | outReg at: key put: (value min: v) ]
 			ifAbsent: [ outReg at: key put: value ].
 		outReg ]
+]
+
+{ #category : #'api - export' }
+DatasetAggregator >> reifyValues: aggregatedDataset [
+
+	^ aggregatedDataset do: [ :each | 
+		  | dict |
+		  (dict := each value) keysDo: [ :key | 
+			  | v |
+			  (v := dict at: key) isArray ifTrue: [ 
+				  dict at: key put: v first / v last ] ] ]
 ]
 
 { #category : #private }
