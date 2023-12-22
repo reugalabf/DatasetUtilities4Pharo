@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'aggregation',
 		'mappings',
-		'keyBlock'
+		'keyBlock',
+		'keyAspect',
+		'filterBlock'
 	],
 	#category : #DatasetUtilities
 }
@@ -35,20 +37,6 @@ DatasetAggregator >> addSumMappingFor: aSymbol [
 
 { #category : #api }
 DatasetAggregator >> aggregate: bulkCollection [
-
-	"| result |
-	bulkCollection do: [ :each | 
-		| key |
-		key := keyBlock value: each when.
-		self applyMappingsTo: each key: key ].
-
-	result := SortedCollection sortBlock: [ :a :b | a key < b key ].
-	aggregation associationsDo: [ :each | 
-		each value at: #when put: each key printString.
-		result add: each ].
-
-
-	^ result"
 
 	^ self reifyValues:
 		  (self aggregateStream: (ReadStream on: bulkCollection))
@@ -92,8 +80,8 @@ DatasetAggregator >> aggregateStream: readStream [
 	[ readStream atEnd ] whileFalse: [ 
 		| each key |
 		each := readStream next.
-		key := keyBlock value: each when.
-		self applyMappingsTo: each key: key ].
+		key := keyBlock value: (each perform: keyAspect).
+		(filterBlock value: key) ifTrue:[self applyMappingsTo: each key: key] ].
 
 	result := SortedCollection sortBlock: [ :a :b | a key < b key ].
 	aggregation associationsDo: [ :each | 
@@ -186,6 +174,18 @@ DatasetAggregator >> daily [
 		            offset: dt offset ]
 ]
 
+{ #category : #accessing }
+DatasetAggregator >> filterBlock [
+
+	^ filterBlock
+]
+
+{ #category : #accessing }
+DatasetAggregator >> filterBlock: anObject [
+
+	filterBlock := anObject
+]
+
 { #category : #api }
 DatasetAggregator >> hourly [
 
@@ -206,7 +206,20 @@ DatasetAggregator >> initialize [
 
 	aggregation := Dictionary new.
 	mappings := Dictionary new.
-	keyBlock := [ :dt | ^ dt ]
+	keyBlock := [ :dt | dt ].
+	filterBlock := [ :dt | true ]
+]
+
+{ #category : #accessing }
+DatasetAggregator >> keyAspect [
+
+	^ keyAspect
+]
+
+{ #category : #accessing }
+DatasetAggregator >> keyAspect: anObject [
+
+	keyAspect := anObject
 ]
 
 { #category : #private }
