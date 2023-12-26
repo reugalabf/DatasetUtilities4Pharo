@@ -52,12 +52,27 @@ DatasetAggregator >> aggregate: bulkCollection do: aBlock [
 DatasetAggregator >> aggregateCSV: bulkCollection [
 
 	^ String streamContents: [ :stream | 
+		  self aggregateCSV: bulkCollection csvOn: stream ]
+]
+
+{ #category : #'api - export' }
+DatasetAggregator >> aggregateCSV: bulkCollection csvOn: outputStream [
+
+	"
+	^ String streamContents: [ :stream | 
 		  | writer |
 		  writer := NeoCSVWriter on: stream.
-		  writer nextPut: self csvHeader. "#( date rain )"
+		  writer nextPut: self csvHeader. ""#( date rain )""
 		  writer addObjectFields: #( key ).
 		  self configureCSVFieldsOn: writer.
-		  writer nextPutAll: (self aggregate: bulkCollection) ]
+		  writer nextPutAll: (self aggregate: bulkCollection) ]"
+
+	| writer |
+	writer := NeoCSVWriter on: outputStream.
+	writer nextPut: self csvHeader. "#( date rain )"
+	writer addObjectFields: #( key ).
+	self configureCSVFieldsOn: writer.
+	writer nextPutAll: (self aggregate: bulkCollection)
 ]
 
 { #category : #'api - export' }
