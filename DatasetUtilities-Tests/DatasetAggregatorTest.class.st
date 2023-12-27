@@ -62,11 +62,7 @@ DatasetAggregatorTest >> testHourlyMultiMappingsReification [
 { #category : #tests }
 DatasetAggregatorTest >> testHourlyMultiMappingsToCSV [
 
-	| col agregator rsp csv array |
-	self halt.
-
-
-
+	| col agregator csv array |
 	col := (NeoJSONReader on: self threeEntriesJson readStream) 
 		       nextListAs: FlareSenseDevelopment.
 

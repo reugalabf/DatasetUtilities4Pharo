@@ -39,33 +39,11 @@ DatasetAggregator >> addSumMappingFor: aSymbol [
 DatasetAggregator >> aggregate: bulkCollection [
 
 	^ self reifyValues:
-		  (self aggregateStream: (ReadStream on: bulkCollection))
-]
-
-{ #category : #api }
-DatasetAggregator >> aggregate: bulkCollection do: aBlock [
-
-	(self aggregate: bulkCollection) do: aBlock
+		  (self aggregateFromStream: (ReadStream on: bulkCollection))
 ]
 
 { #category : #'api - export' }
-DatasetAggregator >> aggregateCSV: bulkCollection [
-
-	^ String streamContents: [ :stream | 
-		  self aggregateCSV: bulkCollection csvOn: stream ]
-]
-
-{ #category : #'api - export' }
-DatasetAggregator >> aggregateCSV: bulkCollection csvOn: outputStream [
-
-	"
-	^ String streamContents: [ :stream | 
-		  | writer |
-		  writer := NeoCSVWriter on: stream.
-		  writer nextPut: self csvHeader. ""#( date rain )""
-		  writer addObjectFields: #( key ).
-		  self configureCSVFieldsOn: writer.
-		  writer nextPutAll: (self aggregate: bulkCollection) ]"
+DatasetAggregator >> aggregate: bulkCollection csvOn: outputStream [
 
 	| writer |
 	writer := NeoCSVWriter on: outputStream.
@@ -75,21 +53,43 @@ DatasetAggregator >> aggregateCSV: bulkCollection csvOn: outputStream [
 	writer nextPutAll: (self aggregate: bulkCollection)
 ]
 
-{ #category : #'api - export' }
-DatasetAggregator >> aggregateJSON: bulkCollection [
+{ #category : #api }
+DatasetAggregator >> aggregate: bulkCollection do: aBlock [
 
-	^ String streamContents: [ :stream | 
+	(self aggregate: bulkCollection) do: aBlock
+]
+
+{ #category : #'api - export' }
+DatasetAggregator >> aggregate: bulkCollection jsonOn: outputStream [
+
+	"^ String streamContents: [ :stream | 
 		  stream nextPutAll:
 			  (NeoJSONWriter toStringPretty: ((self aggregate: bulkCollection)
 					    inject: OrderedCollection new
 					    into: [ :col :each | 
 						    col
 							    add: each value;
-							    yourself ])) ]
+							    yourself ])) ]"
+					
+				
+			outputStream nextPutAll:
+			  (NeoJSONWriter toStringPretty: ((self aggregate: bulkCollection)
+					    inject: OrderedCollection new
+					    into: [ :col :each | 
+						    col
+							    add: each value;
+							    yourself ]))
+]
+
+{ #category : #'api - export' }
+DatasetAggregator >> aggregateCSV: bulkCollection [
+
+	^ String streamContents: [ :stream | 
+		  self aggregate: bulkCollection csvOn: stream ]
 ]
 
 { #category : #api }
-DatasetAggregator >> aggregateStream: readStream [
+DatasetAggregator >> aggregateFromStream: readStream [
 
 	| result |
 	[ readStream atEnd ] whileFalse: [ 
@@ -104,6 +104,13 @@ DatasetAggregator >> aggregateStream: readStream [
 		result add: each ].
 
 	^ result
+]
+
+{ #category : #'api - export' }
+DatasetAggregator >> aggregateJSON: bulkCollection [
+
+	^ String streamContents: [ :stream | 
+		  self aggregate: bulkCollection jsonOn: stream ]
 ]
 
 { #category : #private }
