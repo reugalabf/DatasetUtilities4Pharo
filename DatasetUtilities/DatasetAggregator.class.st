@@ -133,17 +133,20 @@ DatasetAggregator >> averageAggregationBlock [
 	^ [ :bulk :outReg :key | 
 	  | value |
 	  value := bulk perform: key.
-	  outReg
+	  value isNumber ifTrue: 
+[	  outReg
 		  at: key
 		  ifPresent: [ :v | 
-			  outReg at: key put: (v
-					   at: 1 put: (v at: 1) + value;
-					   at: 2 put: (v at: 2) + 1;
-					   yourself) ]
+			  v ifNotNil: [ 
+				  outReg at: key put: (v
+						   at: 1 put: ((v at: 1) + value);
+						   at: 2 put: (v at: 2) + 1;
+						   yourself) ] ]
 		  ifAbsent: [ 
-			  outReg at: key put: { 
-					  value.
-					  1 } ].
+			  value ifNotNil: [ 
+				  outReg at: key put: { 
+						  value.
+						  1 } ] ]].
 	  outReg ]
 ]
 
@@ -165,11 +168,12 @@ DatasetAggregator >> configureCSVFieldsOn: writer [
 
 	mappings keysDo: [ :k | 
 		writer addObjectField: [ :dict | 
-			| obj |
-			obj := dict value at: k asSymbol.
+			dict value at: k asSymbol ifAbsent: nil
+			"| obj |
+			obj := dict value at: k asSymbol ifAbsent: nil.
 			obj isArray
 				ifTrue: [ (obj first / obj second) asFloat ]
-				ifFalse: [ obj ] ] ]
+				ifFalse: [ obj ]" ] ]
 ]
 
 { #category : #'api - export' }
@@ -246,26 +250,30 @@ DatasetAggregator >> keyAspect: anObject [
 
 { #category : #private }
 DatasetAggregator >> maxAggregationBlock [
-^[ :bulk :outReg :key | 
-		| value |
-		value := bulk perform: key.
-		outReg
-			at: key
-			ifPresent: [ :v | outReg at: key put: (value max: v) ]
-			ifAbsent: [ outReg at: key put: value ].
-		outReg ]
+
+	^ [ :bulk :outReg :key | 
+	  | value |
+	  value := bulk perform: key.
+	  value isNumber ifTrue: [ 
+		  outReg
+			  at: key
+			  ifPresent: [ :v | outReg at: key put: (value max: v) ]
+			  ifAbsent: [ outReg at: key put: value ] ].
+	  outReg ]
 ]
 
 { #category : #private }
 DatasetAggregator >> minAggregationBlock [
-^[ :bulk :outReg :key | 
-		| value |
-		value := bulk perform: key.
-		outReg
-			at: key
-			ifPresent: [ :v | outReg at: key put: (value min: v) ]
-			ifAbsent: [ outReg at: key put: value ].
-		outReg ]
+
+	^ [ :bulk :outReg :key | 
+	  | value |
+	  value := bulk perform: key.
+	  value isNumber ifTrue: [ 
+		  outReg
+			  at: key
+			  ifPresent: [ :v | outReg at: key put: (value min: v) ]
+			  ifAbsent: [ outReg at: key put: value ] ].
+	  outReg ]
 ]
 
 { #category : #'api - export' }
@@ -276,17 +284,19 @@ DatasetAggregator >> reifyValues: aggregatedDataset [
 		  (dict := each value) keysDo: [ :key | 
 			  | v |
 			  (v := dict at: key) isArray ifTrue: [ 
-				  dict at: key put: v first / v last ] ] ]
+				  dict at: key put: (v first / v last)asFloat ] ] ]
 ]
 
 { #category : #private }
 DatasetAggregator >> sumAggregationBlock [
-^[ :bulk :outReg :key | 
-		| value |
-		value := bulk perform: key.
-		outReg
-			at: key
-			ifPresent: [ :v | outReg at: key put: value + v ]
-			ifAbsent: [ outReg at: key put: value ].
-		outReg ]
+
+	^ [ :bulk :outReg :key | 
+	  | value |
+	  value := bulk perform: key.
+	  value isNumber ifTrue: [ 
+		  outReg
+			  at: key
+			  ifPresent: [ :v | outReg at: key put: value + v ]
+			  ifAbsent: [ outReg at: key put: value ] ].
+	  outReg ]
 ]
