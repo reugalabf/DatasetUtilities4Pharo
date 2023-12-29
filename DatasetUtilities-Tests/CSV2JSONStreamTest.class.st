@@ -45,7 +45,7 @@ CSV2JSONStreamTest >> testCompleteDataset [
 CSV2JSONStreamTest >> testinCompleteDataset1 [
 
 	| converter |
-	self halt.
+	
 	converter := CSV2JSONStream source:
 		             (ReadStream on: self incompleteDataset1).
 	self should: [ converter headers size = 3 ].

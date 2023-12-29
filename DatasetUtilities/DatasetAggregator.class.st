@@ -35,6 +35,13 @@ DatasetAggregator >> addSumMappingFor: aSymbol [
 	mappings at: aSymbol put: self sumAggregationBlock
 ]
 
+{ #category : #accessing }
+DatasetAggregator >> afterDateandTime: dt [
+
+	^ self filterBlock: [ :key | 
+		  key > dt ]
+]
+
 { #category : #api }
 DatasetAggregator >> aggregate: bulkCollection [
 
@@ -148,6 +155,22 @@ DatasetAggregator >> averageAggregationBlock [
 						  value.
 						  1 } ] ]].
 	  outReg ]
+]
+
+{ #category : #accessing }
+DatasetAggregator >> beforeDateandTime: dt [
+
+	^ self filterBlock: [ :each | 
+		  (DateAndTime fromString: (each at: 'when')) < dt ]
+]
+
+{ #category : #accessing }
+DatasetAggregator >> between: dt1 and: dt2 [
+
+	dt1 < dt2 ifFalse: [ self error: 'Period out of order' ].
+	^ self filterBlock: [ :each | 
+		  (DateAndTime fromString: (each at: 'when')) < dt2 and: [ 
+			  (DateAndTime fromString: (each at: 'when')) > dt1 ] ]
 ]
 
 { #category : #private }

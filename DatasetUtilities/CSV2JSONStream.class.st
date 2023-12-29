@@ -39,6 +39,19 @@ CSV2JSONStream >> next [
 	^ NeoJSONWriter toStringPretty: record
 ]
 
+{ #category : #'stream protocol' }
+CSV2JSONStream >> nextAs: schema [
+
+	"	| record row |
+	row := sourceStream next.
+	record := Dictionary new.
+	1 to: headers size do: [ :idx | 
+	record at: (headers at: idx) asSymbol put: (row at: idx) ].
+	^ NeoJSONWriter toStringPretty: record"
+
+	^ (NeoJSONReader on: self next readStream) nextAs: schema
+]
+
 { #category : #accessing }
 CSV2JSONStream >> sourceStream [
 

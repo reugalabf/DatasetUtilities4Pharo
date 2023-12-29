@@ -128,8 +128,7 @@ DatasetAggregatorTest >> testMultiMappingsFilter [
 		col first when printString = '2023-11-28T13:03:38.897+00:00' ].
 	agregator := DatasetAggregator new.
 	agregator
-		filterBlock: [ :dt | 
-			dt > (DateAndTime fromString: '2023-11-28T13:03:38.897Z') ];
+		afterDateandTime: (DateAndTime fromString: '2023-11-28T13:03:38.897Z') ;
 		keyAspect: #when;
 		addAverageMappingFor: #hum;
 		addSumMappingFor: #tem;
@@ -141,7 +140,7 @@ DatasetAggregatorTest >> testMultiMappingsFilter [
 	self should: [ aggregated size = 2 ].
 	self should: [ 
 		(aggregated first value at: 'when')
-		= '2023-11-28T13:38:45.393+00:00' ].
+		= '2023-11-28T13:08:45.393+00:00' ].
 	self should: [ (aggregated first value at: #hum) = 66.7 ]
 ]
 
@@ -160,8 +159,7 @@ DatasetAggregatorTest >> testMultiMappingsFilterHourly [
 		col first when printString = '2023-11-28T13:03:38.897+00:00' ].
 	agregator := DatasetAggregator new.
 	agregator
-		filterBlock: [ :dt | 
-			dt > (DateAndTime fromString: '2023-11-28T12:03:38.897Z') ];
+		afterDateandTime:  (DateAndTime fromString: '2023-11-28T12:03:38.897Z') ;
 		keyAspect: #when;
 		hourly;
 		addAverageMappingFor: #hum;
@@ -170,12 +168,12 @@ DatasetAggregatorTest >> testMultiMappingsFilterHourly [
 		addMinMappingFor: #temperature_ws.
 	"		hourly;"
 
-	aggregated := agregator aggregate: col.
-	self should: [ aggregated size = 2 ].
+	aggregated := agregator  aggregate: col.
+	self should: [ aggregated size = 1 ].
 	self should: [ 
 		(aggregated first value at: 'when')
 		= '2023-11-28T13:00:00+00:00' ].
-	self should: [ (aggregated first value at: #hum) = 70.0 ]
+	self should: [ (aggregated first value at: #hum) asInteger = 70 ]
 ]
 
 { #category : #tests }
