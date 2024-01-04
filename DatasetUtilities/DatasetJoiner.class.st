@@ -10,13 +10,13 @@ Class {
 	#category : #DatasetUtilities
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 DatasetJoiner >> csvHeaderOf: join [
 
 	^ join anyOne value keys
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 DatasetJoiner >> dsView1: view1 dsView2: view2 [
 
 	dsView1 := view1.
@@ -30,7 +30,7 @@ DatasetJoiner >> initialize [
 	^ self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #API }
 DatasetJoiner >> join [
 
 	| kStream |
@@ -46,7 +46,7 @@ DatasetJoiner >> join [
 	^result
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #API }
 DatasetJoiner >> joinAsCsv [
 
 	| outputStream |
@@ -55,21 +55,18 @@ DatasetJoiner >> joinAsCsv [
 	^ outputStream contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #API }
 DatasetJoiner >> joinAsCsvOn: outputStream [
 
-
-	| writer join|
-	join:= self join.
+	| writer join |
+	join := self join.
 	writer := NeoCSVWriter on: outputStream.
-	writer nextPut: (self csvHeaderOf:join). "#( date rain )"
-	"writer addObjectFields: #( key ).
-	self configureCSVFieldsOn: writer.
-	"
-	writer nextPutAll: (join)
+	writer nextPut: (self csvHeaderOf: join). "#( date rain )"
+
+	writer nextPutAll: join
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #API }
 DatasetJoiner >> joinAsJson [
 
 	| outputStream |
@@ -83,7 +80,7 @@ DatasetJoiner >> joinAsJson [
 	^ outputStream contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #API }
 DatasetJoiner >> joinAsJsonOn: outputStream [
 
 	outputStream nextPutAll: (NeoJSONWriter toStringPretty:
