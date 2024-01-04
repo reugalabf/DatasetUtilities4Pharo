@@ -69,23 +69,13 @@ DatasetAggregator >> aggregate: bulkCollection do: aBlock [
 { #category : #'api - export' }
 DatasetAggregator >> aggregate: bulkCollection jsonOn: outputStream [
 
-	"^ String streamContents: [ :stream | 
-		  stream nextPutAll:
-			  (NeoJSONWriter toStringPretty: ((self aggregate: bulkCollection)
-					    inject: OrderedCollection new
-					    into: [ :col :each | 
-						    col
-							    add: each value;
-							    yourself ])) ]"
-					
-				
-			outputStream nextPutAll:
-			  (NeoJSONWriter toStringPretty: ((self aggregate: bulkCollection)
-					    inject: OrderedCollection new
-					    into: [ :col :each | 
-						    col
-							    add: each value;
-							    yourself ]))
+	outputStream nextPutAll:
+		(NeoJSONWriter toStringPretty: ((self aggregate: bulkCollection)
+				  inject: OrderedCollection new
+				  into: [ :col :each | 
+					  col
+						  add: each value;
+						  yourself ]))
 ]
 
 { #category : #'api - export' }
