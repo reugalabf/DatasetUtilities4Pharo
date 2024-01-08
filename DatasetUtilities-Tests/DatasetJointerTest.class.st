@@ -10,7 +10,7 @@ DatasetJointerTest >> datasetViewH [
 	^ (DatasetView
 		   name: 'H'
 		   source:
-			   ((CSV2JSONStream source: self hCSVDataset readStream) 
+			   ((CSV2ObjectStream source: self hCSVDataset readStream) 
 				    nextListAs: nil)
 		   keyBlock: [ :entry | entry at: 'a' ])
 		  columns: #( 'b' );
@@ -23,7 +23,7 @@ DatasetJointerTest >> datasetViewK [
 	^ (DatasetView
 		   name: 'K'
 		   source:
-			   ((CSV2JSONStream source: self kCSVDataset readStream) 
+			   ((CSV2ObjectStream source: self kCSVDataset readStream) 
 				    nextListAs: nil)
 		   keyBlock: [ :entry | entry at: 'a' ])
 		  columns: #( 'r' 't' );

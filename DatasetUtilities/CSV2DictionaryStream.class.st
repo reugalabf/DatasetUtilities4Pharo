@@ -1,11 +1,11 @@
 Class {
-	#name : #CSV2JSONStream,
+	#name : #CSV2DictionaryStream,
 	#superclass : #CSV2ObjectStream,
 	#category : #DatasetUtilities
 }
 
 { #category : #'as yet unclassified' }
-CSV2JSONStream >> convertFromDictionary: record [
+CSV2DictionaryStream >> convertFromDictionary: record [
 
-	^ NeoJSONWriter toStringPretty: record
+	^ record
 ]
