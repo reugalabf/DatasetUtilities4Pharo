@@ -26,11 +26,17 @@ CSV2ObjectStream >> atEnd [
 { #category : #'stream protocol' }
 CSV2ObjectStream >> contents [
 
-	| col reader |
+	| col |
 	col := OrderedCollection new.
-	reader := NeoJSONReader on: sourceStream.
+
 	[ self atEnd ] whileFalse: [ col addLast: self next ].
-	^ col
+	^ self convertFromDictionaries: col
+]
+
+{ #category : #'stream protocol' }
+CSV2ObjectStream >> convertFromDictionaries: records [
+
+	^ self subclassResponsibility
 ]
 
 { #category : #'stream protocol' }

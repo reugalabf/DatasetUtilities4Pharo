@@ -35,11 +35,10 @@ a3,b3,c3'
 CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset1 [
 
 	| converter |
-	
-	converter := CSV2DictionaryStream  source:
+	converter := CSV2DictionaryStream source:
 		             (ReadStream on: self incompleteDataset1).
 	self should: [ converter headers size = 3 ].
-	self should:[ (converter halt next) size = 3 ]
+	self should: [ converter next size = 3 ]
 ]
 
 { #category : #tests }
@@ -50,6 +49,16 @@ CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset2 [
 		             (ReadStream on: self incompleteDataset2).
 	self should: [ converter headers size = 3 ].
 	self should:[ (converter next) size = 3 ]
+]
+
+{ #category : #tests }
+CSV2ObjectStreamTest >> testDictionaryStreamContentsCompleteDataset2 [
+
+	| converter |
+	converter := CSV2DictionaryStream source:
+		             (ReadStream on: self incompleteDataset2).
+	self should: [ converter headers size = 3 ].
+	self should: [ converter contents size = 3 ]
 ]
 
 { #category : #tests }
@@ -74,6 +83,19 @@ CSV2ObjectStreamTest >> testJsonSchemaStreamCompleteDataset1 [
 ]
 
 { #category : #tests }
+CSV2ObjectStreamTest >> testJsonSchemaStreamContentsCompleteDataset1 [
+
+	| converter |
+	converter := CSV2JSONSchemaStream source:
+		             (ReadStream on: self incompleteDataset1).
+	self should: [ converter headers size = 3 ].
+
+	self should: [ converter contents size = 3 ]
+
+
+]
+
+{ #category : #tests }
 CSV2ObjectStreamTest >> testJsonStreamCompleteDataset1 [
 
 	| converter |
@@ -88,4 +110,19 @@ CSV2ObjectStreamTest >> testJsonStreamCompleteDataset1 [
 	self should: [ 
 		(NeoJSONReader on: converter next readStream) next notNil ].
 	self should: [ converter next isNil ]
+]
+
+{ #category : #tests }
+CSV2ObjectStreamTest >> testJsonStreamContentsCompleteDataset1 [
+
+	| converter json |
+	converter := CSV2JSONStream source:
+		             (ReadStream on: self incompleteDataset1).
+	self should: [ converter headers size = 3 ].
+
+	json := converter contents.
+
+
+
+	self should: [ (NeoJSONReader on: json readStream) next notNil ]
 ]

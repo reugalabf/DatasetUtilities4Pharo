@@ -4,6 +4,12 @@ Class {
 	#category : #DatasetUtilities
 }
 
+{ #category : #'stream protocol' }
+CSV2DictionaryStream >> convertFromDictionaries: records [
+
+	^ records
+]
+
 { #category : #'as yet unclassified' }
 CSV2DictionaryStream >> convertFromDictionary: record [
 

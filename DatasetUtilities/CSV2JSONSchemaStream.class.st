@@ -8,6 +8,14 @@ Class {
 }
 
 { #category : #'stream protocol' }
+CSV2JSONSchemaStream >> convertFromDictionaries: records [
+
+	^ (NeoJSONReader on:
+		   (NeoJSONWriter toStringPretty: records) readStream) nextListAs:
+		  schema
+]
+
+{ #category : #'stream protocol' }
 CSV2JSONSchemaStream >> convertFromDictionary: record [
 
 	| json |

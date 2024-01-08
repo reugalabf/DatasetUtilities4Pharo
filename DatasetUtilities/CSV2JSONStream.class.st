@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+CSV2JSONStream >> convertFromDictionaries: records [
+
+	^ NeoJSONWriter toStringPretty: records
+]
+
+{ #category : #'as yet unclassified' }
 CSV2JSONStream >> convertFromDictionary: record [
 
 	^ NeoJSONWriter toStringPretty: record
