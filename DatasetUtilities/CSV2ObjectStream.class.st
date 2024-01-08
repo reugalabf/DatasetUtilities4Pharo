@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'sourceStream',
 		'headers',
-		'filterAssociation'
+		'filterBlock',
+		'keyIndex'
 	],
 	#category : #DatasetUtilities
 }
@@ -48,7 +49,7 @@ CSV2ObjectStream >> convertFromDictionary: record [
 { #category : #accessing }
 CSV2ObjectStream >> filterBlock: anObject [
 
-	filterAssociation := anObject
+	filterBlock := anObject
 ]
 
 { #category : #accessing }
@@ -57,16 +58,41 @@ CSV2ObjectStream >> headers [
 	^ headers
 ]
 
+{ #category : #initialization }
+CSV2ObjectStream >> initialize [
+
+	keyIndex := 0.
+	filterBlock:=[:row| true]
+]
+
+{ #category : #'stream protocol' }
+CSV2ObjectStream >> keyColumn: aString [
+
+	keyIndex := headers indexOf: aString
+]
+
 { #category : #'stream protocol' }
 CSV2ObjectStream >> next [
 
 	| record row |
 	sourceStream atEnd ifTrue: [ ^ nil ].
-	row := sourceStream next.
+	row := self nextFilteredRow.
+	row ifNil: [ ^ nil ].
 	record := Dictionary new.
+
 	1 to: headers size do: [ :idx | 
 	record at: (headers at: idx) asSymbol put: (row at: idx) ].
 	^ self convertFromDictionary: record
+]
+
+{ #category : #'stream protocol' }
+CSV2ObjectStream >> nextFilteredRow [
+
+	| row |
+	row := nil.
+	[ sourceStream atEnd or: [ row notNil ] ] whileFalse: [ 
+		row := self valueFilterBlockWithRow: sourceStream next ].
+	^ row
 ]
 
 { #category : #accessing }
@@ -83,4 +109,12 @@ CSV2ObjectStream >> sourceStream: anObject [
 			sourceStream := NeoCSVReader on:anObject.
 			headers := sourceStream readHeader ]
 		ifFalse: [ self error: 'Changing source is not allowed' ]
+]
+
+{ #category : #'stream protocol' }
+CSV2ObjectStream >> valueFilterBlockWithRow: aRow [
+
+	^ (keyIndex = 0 or: [ filterBlock value: (aRow at: keyIndex) ])
+		  ifTrue: [ aRow ]
+		  ifFalse: [ nil ]
 ]
