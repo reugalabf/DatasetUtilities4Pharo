@@ -5,7 +5,8 @@ Class {
 		'sourceStream',
 		'headers',
 		'filterBlock',
-		'keyIndex'
+		'keyIndex',
+		'filteredHeaders'
 	],
 	#category : #DatasetUtilities
 }
@@ -47,6 +48,12 @@ CSV2ObjectStream >> convertFromDictionary: record [
 ]
 
 { #category : #accessing }
+CSV2ObjectStream >> filteredHeaders: anObject [
+
+	filteredHeaders := anObject
+]
+
+{ #category : #accessing }
 CSV2ObjectStream >> headers [
 
 	^ headers
@@ -76,7 +83,9 @@ CSV2ObjectStream >> next [
 	record := Dictionary new.
 
 	1 to: headers size do: [ :idx | 
-	record at: (headers at: idx) asSymbol put: (row at: idx) ].
+		(filteredHeaders notNil and: [ 
+			 filteredHeaders includes: (headers at: idx) ]) ifTrue: [ 
+			record at: (headers at: idx) asSymbol put: (row at: idx) ] ].
 	^ self convertFromDictionary: record
 ]
 
