@@ -81,6 +81,7 @@ DatasetAggregatorTest >> testHourlyMultiMappingsToCSV [
 
 
 	csv := agregator aggregateCSV: col.
+	csv inspect.
 	array := (NeoCSVReader on: csv readStream) upToEnd.
 
 	self should: [ array size = 3 ].
