@@ -47,12 +47,6 @@ CSV2ObjectStream >> convertFromDictionary: record [
 ]
 
 { #category : #accessing }
-CSV2ObjectStream >> filterBlock: anObject [
-
-	filterBlock := anObject
-]
-
-{ #category : #accessing }
 CSV2ObjectStream >> headers [
 
 	^ headers
@@ -65,10 +59,11 @@ CSV2ObjectStream >> initialize [
 	filterBlock:=[:row| true]
 ]
 
-{ #category : #'stream protocol' }
-CSV2ObjectStream >> keyColumn: aString [
+{ #category : #accessing }
+CSV2ObjectStream >> keyColumn: aString filterBlock: aBlock [
 
-	keyIndex := headers indexOf: aString
+	keyIndex := headers indexOf: aString.
+	filterBlock := aBlock
 ]
 
 { #category : #'stream protocol' }

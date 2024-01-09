@@ -62,6 +62,19 @@ CSV2ObjectStreamTest >> testDictionaryStreamContentsCompleteDataset2 [
 ]
 
 { #category : #tests }
+CSV2ObjectStreamTest >> testDictionaryStreamFilteredCompleteDataset1 [
+
+	| converter |
+	converter := CSV2DictionaryStream source:
+		             (ReadStream on: self incompleteDataset2).
+		converter keyColumn: 'h2' filterBlock: [:cell| cell notNil]. 
+	self should: [ converter headers size = 3 ].
+	"self should: [ converter next size = 3 ].
+	self should: [ converter next isNil ]."
+	self should: [converter contents size = 2].
+]
+
+{ #category : #tests }
 CSV2ObjectStreamTest >> testDictionaryStreamWithCompleteDataset [
 
 	| converter |
