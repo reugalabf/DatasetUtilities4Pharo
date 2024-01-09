@@ -10,8 +10,8 @@ DatasetJointerTest >> datasetViewH [
 	^ (DatasetView
 		   name: 'H'
 		   source:
-			   ((CSV2ObjectStream source: self hCSVDataset readStream) 
-				    nextListAs: nil)
+			   ((CSV2DictionaryStream  source: self hCSVDataset readStream) 
+				    contents)
 		   keyBlock: [ :entry | entry at: 'a' ])
 		  columns: #( 'b' );
 		  yourself
@@ -23,8 +23,8 @@ DatasetJointerTest >> datasetViewK [
 	^ (DatasetView
 		   name: 'K'
 		   source:
-			   ((CSV2ObjectStream source: self kCSVDataset readStream) 
-				    nextListAs: nil)
+			   ((CSV2DictionaryStream  source: self kCSVDataset readStream) 
+				    contents)
 		   keyBlock: [ :entry | entry at: 'a' ])
 		  columns: #( 'r' 't' );
 		  yourself
@@ -84,6 +84,7 @@ a3,r3,s3,t3'
 DatasetJointerTest >> testTwoCompleteDatasets [
 
 	| viewH viewK join |
+	
 	viewH := self datasetViewH.
 
 

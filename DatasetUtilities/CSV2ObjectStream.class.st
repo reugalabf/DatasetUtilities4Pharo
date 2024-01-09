@@ -83,7 +83,7 @@ CSV2ObjectStream >> next [
 	record := Dictionary new.
 
 	1 to: headers size do: [ :idx | 
-		(filteredHeaders notNil and: [ 
+		(filteredHeaders isNil or: [ 
 			 filteredHeaders includes: (headers at: idx) ]) ifTrue: [ 
 			record at: (headers at: idx) asSymbol put: (row at: idx) ] ].
 	^ self convertFromDictionary: record
