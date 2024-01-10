@@ -42,6 +42,23 @@ CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset1 [
 ]
 
 { #category : #tests }
+CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset1FilteredHeads [
+
+	| converter ws headers |
+	converter := CSV2DictionaryStream source:
+		             (ReadStream on: self incompleteDataset1).
+	converter filteredHeaders: #( 'h1' 'h3' 'h2' ).
+	self should: [ converter headers size = 3 ].
+	ws := WriteStream on: String new.
+
+	converter exportContentsAsCSVOn: ws.
+	headers := (NeoCSVReader on: ws contents readStream) next.
+	self should: [ (headers at: 1) = 'h1' ].
+	self should: [ (headers at: 2) = 'h2' ].
+	self should: [ (headers at: 3) = 'h3' ]
+]
+
+{ #category : #tests }
 CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset2 [
 
 	| converter |
