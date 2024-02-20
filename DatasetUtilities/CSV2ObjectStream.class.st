@@ -82,10 +82,18 @@ CSV2ObjectStream >> next [
 	row ifNil: [ ^ nil ].
 	record := Dictionary new.
 
-	1 to: headers size do: [ :idx | 
+	filteredHeaders do: [ :each | 
+		(headers includes: each)
+			ifFalse: [ self error: 'Missing header' ]
+			ifTrue: [ 
+			record at: each asSymbol put: (row at: (headers indexOf: each)) ] ].
+
+self halt.
+	"	1 to: headers size do: [ :idx | 
 		(filteredHeaders isNil or: [ 
-			 filteredHeaders includes: (headers at: idx) ]) ifTrue: [ 
-			record at: (headers at: idx) asSymbol put: (row at: idx) ] ].
+			 filteredHeaders includes: (headers at: idx) ])
+			ifFalse: [ self error: 'Missing header' ]
+			ifTrue: [ record at: (headers at: idx) asSymbol put: (row at: idx) ] ]."
 	^ self convertFromDictionary: record
 ]
 

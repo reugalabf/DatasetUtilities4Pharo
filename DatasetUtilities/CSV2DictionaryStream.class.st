@@ -21,7 +21,7 @@ CSV2DictionaryStream >> exportContentsAsCSVOn: writeStream [
 
 	| writer |
 	writer := NeoCSVWriter on: writeStream.
-	writer nextPut: (headers select:[:each| filteredHeaders includes: each]). 
+	writer nextPut: filteredHeaders "(headers select:[:each| filteredHeaders includes: each])". 
 	[ self atEnd ] whileFalse: [ writer nextPut: self next values ].
 
 ]
