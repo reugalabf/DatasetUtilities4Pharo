@@ -88,7 +88,7 @@ CSV2ObjectStream >> next [
 			ifTrue: [ 
 			record at: each asSymbol put: (row at: (headers indexOf: each)) ] ].
 
-self halt.
+
 	"	1 to: headers size do: [ :idx | 
 		(filteredHeaders isNil or: [ 
 			 filteredHeaders includes: (headers at: idx) ])
