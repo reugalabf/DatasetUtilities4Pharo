@@ -297,7 +297,7 @@ DatasetAggregator >> reifyValues: aggregatedDataset [
 		  (dict := each value) keysDo: [ :key | 
 			  | v |
 			  (v := dict at: key) isArray ifTrue: [ 
-				  dict at: key put: (v first / v last)asFloat ] ] ]
+				  dict at: key put: (v first / v last round: 1) asFloat ] ] ]
 ]
 
 { #category : #private }
