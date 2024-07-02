@@ -14,25 +14,75 @@ Class {
 { #category : #api }
 DatasetAggregator >> addAverageMappingFor: aSymbol [
 
-	mappings at: aSymbol put: self averageAggregationBlock
+	self addAverageMappingFor: aSymbol as: aSymbol
+]
+
+{ #category : #api }
+DatasetAggregator >> addAverageMappingFor: aSymbol as: anotherSymbol [
+
+	mappings
+		at: aSymbol -> anotherSymbol
+		put: self averageAggregationBlock
+]
+
+{ #category : #api }
+DatasetAggregator >> addDateMappingFor: aSymbol [
+
+	self addDateMappingFor: aSymbol as: #Date
+]
+
+{ #category : #api }
+DatasetAggregator >> addDateMappingFor: aSymbol as: anotherSymbol [
+
+	mappings at: aSymbol -> anotherSymbol put: self dateSplitBlock
 ]
 
 { #category : #api }
 DatasetAggregator >> addMaxMappingFor: aSymbol [
 
-	mappings at: aSymbol put: self maxAggregationBlock
+	self addMaxMappingFor: aSymbol as: aSymbol
+]
+
+{ #category : #api }
+DatasetAggregator >> addMaxMappingFor: aSymbol as: anotherSymbol [
+
+	mappings at: aSymbol -> anotherSymbol put: self maxAggregationBlock
 ]
 
 { #category : #api }
 DatasetAggregator >> addMinMappingFor: aSymbol [
 
-	mappings at: aSymbol put: self minAggregationBlock
+	self addMinMappingFor: aSymbol as: aSymbol
+]
+
+{ #category : #api }
+DatasetAggregator >> addMinMappingFor: aSymbol as: anotherSymbol [
+
+	mappings at: aSymbol -> anotherSymbol put: self minAggregationBlock
 ]
 
 { #category : #api }
 DatasetAggregator >> addSumMappingFor: aSymbol [
 
-	mappings at: aSymbol put: self sumAggregationBlock
+	self addSumMappingFor: aSymbol as: aSymbol
+]
+
+{ #category : #api }
+DatasetAggregator >> addSumMappingFor: aSymbol as: anotherSymbol [
+
+	mappings at: aSymbol -> anotherSymbol put: self sumAggregationBlock
+]
+
+{ #category : #api }
+DatasetAggregator >> addTimeMappingFor: aSymbol [
+
+	self addTimeMappingFor: aSymbol as: #Time
+]
+
+{ #category : #api }
+DatasetAggregator >> addTimeMappingFor: aSymbol as: anotherSymbol [
+
+	mappings at: aSymbol -> anotherSymbol put: self timeSplitBlock
 ]
 
 { #category : #accessing }
@@ -46,7 +96,7 @@ DatasetAggregator >> afterDateandTime: dt [
 DatasetAggregator >> aggregate: bulkCollection [
 
 	^ self reifyValues:
-		  (self aggregateFromStream: (ReadStream on: bulkCollection))
+		  (self  aggregateFromStream: (ReadStream on: bulkCollection))
 ]
 
 { #category : #'api - export' }
@@ -127,21 +177,22 @@ DatasetAggregator >> applyMappingsTo: row key: key [
 { #category : #private }
 DatasetAggregator >> averageAggregationBlock [
 
-	^ [ :bulk :outReg :key | 
+	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := bulk perform: key.
+	
+	  value := bulk perform: assocKey key asSymbol.
 	  value isNumber ifTrue: 
 [	  outReg
-		  at: key
+		  at: assocKey value
 		  ifPresent: [ :v | 
 			  v ifNotNil: [ 
-				  outReg at: key put: (v
+				  outReg at: assocKey value put: (v
 						   at: 1 put: ((v at: 1) + value);
 						   at: 2 put: (v at: 2) + 1;
 						   yourself) ] ]
 		  ifAbsent: [ 
 			  value ifNotNil: [ 
-				  outReg at: key put: { 
+				  outReg at: assocKey value put: { 
 						  value.
 						  1 } ] ]].
 	  outReg ]
@@ -166,22 +217,22 @@ DatasetAggregator >> between: dt1 and: dt2 [
 { #category : #private }
 DatasetAggregator >> collateAggregationBlock [
 
-	^ [ :bulk :outReg :key | 
+	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := bulk perform: key.
+	  value := bulk perform: assocKey key.
 	  outReg
-		  at: key
-		  ifPresent: [ :v | outReg at: key put: v , ' ' , value ]
-		  ifAbsent: [ outReg at: key put: value ].
+		  at: assocKey value
+		  ifPresent: [ :v | outReg at: assocKey put: v , ' ' , value ]
+		  ifAbsent: [ outReg at: assocKey put: value ].
 	  outReg ]
 ]
 
 { #category : #'api - export' }
 DatasetAggregator >> configureCSVFieldsOn: writer [
 
-	mappings keysDo: [ :k | 
+	mappings keysDo: [ :assocKey | 
 		writer addObjectField: [ :dict | 
-			dict value at: k asSymbol ifAbsent: nil
+			dict value at: assocKey key asSymbol ifAbsent: nil
 			"| obj |
 			obj := dict value at: k asSymbol ifAbsent: nil.
 			obj isArray
@@ -194,7 +245,7 @@ DatasetAggregator >> csvHeader [
 
 	| header |
 	header := OrderedCollection with: 'key'.
-	header addAll: mappings keys.
+	header addAll: (mappings keys collect:[:each| each value]).
 	^ header
 ]
 
@@ -211,6 +262,17 @@ DatasetAggregator >> daily [
 		            second: 0
 		            nanoSecond: 0
 		            offset: dt offset ]
+]
+
+{ #category : #private }
+DatasetAggregator >> dateSplitBlock [
+
+	^ [ :bulk :outReg :assocKey | 
+	  | value |
+	  value := bulk perform: assocKey key.
+	  value class = DateAndTime ifTrue: [ 
+		  outReg at: assocKey value put: value asDate.
+		  outReg ] ]
 ]
 
 { #category : #accessing }
@@ -264,28 +326,28 @@ DatasetAggregator >> keyAspect: anObject [
 { #category : #private }
 DatasetAggregator >> maxAggregationBlock [
 
-	^ [ :bulk :outReg :key | 
+	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := bulk perform: key.
+	  value := bulk perform: assocKey key.
 	  value isNumber ifTrue: [ 
 		  outReg
-			  at: key
-			  ifPresent: [ :v | outReg at: key put: (value max: v) ]
-			  ifAbsent: [ outReg at: key put: value ] ].
+			  at: assocKey value
+			  ifPresent: [ :v | outReg at: assocKey value  put: (value max: v) ]
+			  ifAbsent: [ outReg at: assocKey value put: value ] ].
 	  outReg ]
 ]
 
 { #category : #private }
 DatasetAggregator >> minAggregationBlock [
 
-	^ [ :bulk :outReg :key | 
+	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := bulk perform: key.
+	  value := bulk perform: assocKey key.
 	  value isNumber ifTrue: [ 
 		  outReg
-			  at: key
-			  ifPresent: [ :v | outReg at: key put: (value min: v) ]
-			  ifAbsent: [ outReg at: key put: value ] ].
+			  at: assocKey value
+			  ifPresent: [ :v | outReg at: assocKey value put: (value min: v) ]
+			  ifAbsent: [ outReg at: assocKey value put: value ] ].
 	  outReg ]
 ]
 
@@ -303,13 +365,24 @@ DatasetAggregator >> reifyValues: aggregatedDataset [
 { #category : #private }
 DatasetAggregator >> sumAggregationBlock [
 
-	^ [ :bulk :outReg :key | 
+	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := bulk perform: key.
+	  value := bulk perform: assocKey key.
 	  value isNumber ifTrue: [ 
 		  outReg
-			  at: key
-			  ifPresent: [ :v | outReg at: key put: value + v ]
-			  ifAbsent: [ outReg at: key put: value ] ].
+			  at: assocKey value
+			  ifPresent: [ :v | outReg at: assocKey value put: value + v ]
+			  ifAbsent: [ outReg at: assocKey value put: value ] ].
 	  outReg ]
+]
+
+{ #category : #private }
+DatasetAggregator >> timeSplitBlock [
+
+	^ [ :bulk :outReg :assocKey | 
+	  | value |
+	  value := bulk perform: assocKey key.
+	  value class = DateAndTime ifTrue: [ 
+		  outReg at: assocKey value put: value asTime.
+		  outReg ] ]
 ]
