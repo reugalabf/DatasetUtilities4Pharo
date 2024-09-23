@@ -208,6 +208,42 @@ DatasetAggregatorTest >> testMultiMappingsReification [
 ]
 
 { #category : #tests }
+DatasetAggregatorTest >> testOneBlockMappings [
+
+	"25.3,""hum"":73.3,"
+
+	| col agregator aggregated |
+	col := (NeoJSONReader on: self threeEntriesJson readStream) 
+		       nextListAs: FlareSenseDevelopment.
+
+	self should: [ col size = 3 ].
+
+
+
+	agregator := DatasetAggregator new.
+	agregator
+		keyAspect: #when;
+		addBlockMapping: [ :bulk :outReg :assocKey | 
+			outReg
+				at: assocKey value
+				put: (bulk tem = 25.3 and: [ bulk hum = 73.3 ]).
+			outReg ]
+		as: #block1.
+	"addAverageMappingFor: #hum."
+	"		addBlockMapping: [ :row :symbol1 :symbol2|  (row tem) < 50 and:[(row hum)>5]  ] for: #hum  as: #block1 ."
+
+	"		addAverageMappingFor: #hum;
+		addSumMappingFor: #tem;
+		addMaxMappingFor: #wind_ws_gust;
+		addMinMappingFor: #temperature_ws."
+	aggregated := agregator aggregate: col.
+	aggregated inspect.
+	self should: [ aggregated size = 3 ].
+
+	self should: [ (aggregated first value at: #block1) = true ]
+]
+
+{ #category : #tests }
 DatasetAggregatorTest >> testSplitDate [
 
 	| col agregator rsp aggregated |

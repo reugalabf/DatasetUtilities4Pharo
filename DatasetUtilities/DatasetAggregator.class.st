@@ -26,6 +26,12 @@ DatasetAggregator >> addAverageMappingFor: aSymbol as: anotherSymbol [
 ]
 
 { #category : #api }
+DatasetAggregator >> addBlockMapping: aBlock as: aSymbol [
+
+	mappings at: aSymbol -> aSymbol put: aBlock
+]
+
+{ #category : #api }
 DatasetAggregator >> addDateMappingFor: aSymbol [
 
 	self addDateMappingFor: aSymbol as: #Date
@@ -245,7 +251,7 @@ DatasetAggregator >> csvHeader [
 
 	| header |
 	header := OrderedCollection with: 'key'.
-	header addAll: (mappings keys collect:[:each| each value]).
+	header addAll: self keys.
 	^ header
 ]
 
@@ -323,6 +329,12 @@ DatasetAggregator >> keyAspect: anObject [
 	keyAspect := anObject
 ]
 
+{ #category : #'api - export' }
+DatasetAggregator >> keys [
+
+	^ mappings keys collect: [ :each | each value ]
+]
+
 { #category : #private }
 DatasetAggregator >> maxAggregationBlock [
 
@@ -385,4 +397,10 @@ DatasetAggregator >> timeSplitBlock [
 	  value class = DateAndTime ifTrue: [ 
 		  outReg at: assocKey value put: value asTime.
 		  outReg ] ]
+]
+
+{ #category : #'api - export' }
+DatasetAggregator >> valueAt: aSymbol from: aRow [
+
+	^ aRow at: (self keys indexOf: aSymbol)
 ]
