@@ -4,6 +4,7 @@ Class {
 	#instVars : [
 		'aggregation',
 		'mappings',
+		'blockMappings',
 		'keyBlock',
 		'keyAspect',
 		'filterBlock'
@@ -28,7 +29,7 @@ DatasetAggregator >> addAverageMappingFor: aSymbol as: anotherSymbol [
 { #category : #api }
 DatasetAggregator >> addBlockMapping: aBlock as: aSymbol [
 
-	mappings
+	blockMappings 
 		at: aSymbol -> aSymbol
 		put: (self blockAggregationBlockWith: aBlock)
 ]
@@ -151,7 +152,8 @@ DatasetAggregator >> aggregateFromStream: readStream [
 		| each key |
 		each := readStream next.
 		key := keyBlock value: (each perform: keyAspect).
-		(filterBlock value: key) ifTrue:[self applyMappingsTo: each key: key] ].
+		(filterBlock value: key) ifTrue: [ 
+			self applyMappingsTo: each key: key ] ].
 
 	result := SortedCollection sortBlock: [ :a :b | a key < b key ].
 	aggregation associationsDo: [ :each | 
@@ -166,6 +168,20 @@ DatasetAggregator >> aggregateJSON: bulkCollection [
 
 	^ String streamContents: [ :stream | 
 		  self aggregate: bulkCollection jsonOn: stream ]
+]
+
+{ #category : #private }
+DatasetAggregator >> applyBlockMappingsTo: row key: key [
+
+	blockMappings  keysAndValuesDo: [ :k :map | 
+		aggregation
+			at: key
+			ifPresent: [ :v | 
+			aggregation at: key put: (map value: row value: v value: k) ]
+			ifAbsent: [ 
+				aggregation
+					at: key
+					put: (map value: row value: Dictionary new value: k) ] ]
 ]
 
 { #category : #private }
@@ -187,7 +203,7 @@ DatasetAggregator >> averageAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	
+	  
 	  value := bulk perform: assocKey key asSymbol.
 	  value isNumber ifTrue: 
 [	  outReg
@@ -265,7 +281,7 @@ DatasetAggregator >> csvHeader [
 	^ header
 ]
 
-{ #category : #api }
+{ #category : #'api - frequency' }
 DatasetAggregator >> daily [
 
 	keyBlock := [ :dt | 
@@ -303,7 +319,7 @@ DatasetAggregator >> filterBlock: anObject [
 	filterBlock := anObject
 ]
 
-{ #category : #api }
+{ #category : #'api - frequency' }
 DatasetAggregator >> hourly [
 
 	keyBlock := [ :dt | 
@@ -323,6 +339,7 @@ DatasetAggregator >> initialize [
 
 	aggregation := Dictionary new.
 	mappings := Dictionary new.
+	blockMappings := Dictionary new.
 	keyBlock := [ :dt | dt ].
 	filterBlock := [ :dt | true ]
 ]
@@ -373,7 +390,7 @@ DatasetAggregator >> minAggregationBlock [
 	  outReg ]
 ]
 
-{ #category : #'api - export' }
+{ #category : #private }
 DatasetAggregator >> reifyValues: aggregatedDataset [
 
 	^ aggregatedDataset do: [ :each | 
@@ -381,7 +398,9 @@ DatasetAggregator >> reifyValues: aggregatedDataset [
 		  (dict := each value) keysDo: [ :key | 
 			  | v |
 			  (v := dict at: key) isArray ifTrue: [ 
-				  dict at: key put: (v first / v last round: 1) asFloat ] ] ]
+				  dict at: key put: (v first / v last round: 1) asFloat ] ].
+
+		  self applyBlockMappingsTo: each value key: each key ]
 ]
 
 { #category : #private }

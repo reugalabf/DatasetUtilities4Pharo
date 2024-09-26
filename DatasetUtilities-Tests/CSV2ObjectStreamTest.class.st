@@ -37,7 +37,7 @@ CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset1 [
 	| converter |
 	converter := CSV2DictionaryStream source:
 		             (ReadStream on: self incompleteDataset1).
-		self halt.
+
 	self should: [ converter headers size = 3 ].
 	self should: [ converter next  size = 3 ]
 ]

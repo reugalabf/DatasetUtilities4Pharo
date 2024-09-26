@@ -129,7 +129,7 @@ CSV2ObjectStream >> sourceStream: anObject [
 	sourceStream isNil
 		ifTrue: [ 
 			sourceStream := NeoCSVReader on:anObject.
-			headers := sourceStream readHeader ]
+			filteredHeaders := headers := sourceStream readHeader ]
 		ifFalse: [ self error: 'Changing source is not allowed' ]
 ]
 
