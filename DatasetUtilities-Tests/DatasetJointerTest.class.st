@@ -9,9 +9,9 @@ DatasetJointerTest >> datasetViewH [
 
 	^ (DatasetView
 		   name: 'H'
-		   source:
-			   ((CSV2DictionaryStream  source: self hCSVDataset readStream) 
-				    contents)
+		   source: (CSV2DictionaryStream
+				    source: self hCSVDataset readStream
+				    filteredHeaders: #( a b c )) contents
 		   keyBlock: [ :entry | entry at: 'a' ])
 		  columns: #( 'b' );
 		  yourself
@@ -23,8 +23,8 @@ DatasetJointerTest >> datasetViewK [
 	^ (DatasetView
 		   name: 'K'
 		   source:
-			   ((CSV2DictionaryStream  source: self kCSVDataset readStream) 
-				    contents)
+			   ((CSV2DictionaryStream source: self kCSVDataset readStream) 
+				    filteredHeaders: #( a r s t )) contents
 		   keyBlock: [ :entry | entry at: 'a' ])
 		  columns: #( 'r' 't' );
 		  yourself

@@ -10,7 +10,7 @@ Class {
 	#category : #DatasetUtilities
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 DatasetView class >> name: aString source: dict keyBlock: aBlock [
 
 	^ self new
@@ -30,13 +30,13 @@ DatasetView >> columns: anObject [
 	columns := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 DatasetView >> keyStream [
 
 	^ (source collect: [ :each | keyBlock value: each ]) readStream
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 DatasetView >> name: aString source: dict keyBlock: aBlock [
 
 	name := aString.

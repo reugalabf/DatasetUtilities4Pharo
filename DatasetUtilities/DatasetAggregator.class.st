@@ -28,7 +28,9 @@ DatasetAggregator >> addAverageMappingFor: aSymbol as: anotherSymbol [
 { #category : #api }
 DatasetAggregator >> addBlockMapping: aBlock as: aSymbol [
 
-	mappings at: aSymbol -> aSymbol put: aBlock
+	mappings
+		at: aSymbol -> aSymbol
+		put: (self blockAggregationBlockWith: aBlock)
 ]
 
 { #category : #api }
@@ -218,6 +220,14 @@ DatasetAggregator >> between: dt1 and: dt2 [
 	^ self filterBlock: [ :each | 
 		  (DateAndTime fromString: (each at: 'when')) < dt2 and: [ 
 			  (DateAndTime fromString: (each at: 'when')) > dt1 ] ]
+]
+
+{ #category : #private }
+DatasetAggregator >> blockAggregationBlockWith: aBlock [
+
+	^ [ :bulk :outReg :assocKey | 
+	  outReg at: assocKey value put: (aBlock value: bulk).
+	  outReg ]
 ]
 
 { #category : #private }

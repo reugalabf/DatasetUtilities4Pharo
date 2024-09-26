@@ -19,6 +19,15 @@ CSV2ObjectStream class >> source: readStream [
 		  yourself
 ]
 
+{ #category : #accessing }
+CSV2ObjectStream class >> source: readStream filteredHeaders: array [
+
+	^ self new
+		  sourceStream: readStream;
+		  filteredHeaders: array;
+		  yourself
+]
+
 { #category : #'stream protocol' }
 CSV2ObjectStream >> atEnd [
 
@@ -63,7 +72,8 @@ CSV2ObjectStream >> headers [
 CSV2ObjectStream >> initialize [
 
 	keyIndex := 0.
-	filterBlock:=[:row| true]
+	filterBlock:=[:row| true].
+	filteredHeaders := Array new
 ]
 
 { #category : #accessing }
