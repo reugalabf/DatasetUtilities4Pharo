@@ -223,11 +223,7 @@ DatasetAggregatorTest >> testOneBlockMappings [
 	agregator := DatasetAggregator new.
 	agregator
 		keyAspect: #when;
-		addBlockMapping: [ :bulk :outReg :assocKey | 
-			outReg
-				at: assocKey value
-				put: (bulk tem = 25.3 and: [ bulk hum = 73.3 ]).
-			outReg ]
+		addBlockMapping: [ :bulk | bulk tem = 25.3 and: [ bulk hum = 73.3 ] ]
 		as: #block1.
 	"addAverageMappingFor: #hum."
 	"		addBlockMapping: [ :row :symbol1 :symbol2|  (row tem) < 50 and:[(row hum)>5]  ] for: #hum  as: #block1 ."
@@ -289,25 +285,21 @@ DatasetAggregatorTest >> testTwoBlocksMappings [
 
 	self should: [ col size = 3 ].
 
-
-
 	agregator := DatasetAggregator new.
 	agregator
 		keyAspect: #when;
 		addBlockMapping: [ :bulk | bulk tem = 25.3 and: [ bulk hum = 73.3 ] ]
-		as: #block1.
-	"addAverageMappingFor: #hum."
-	"		addBlockMapping: [ :row :symbol1 :symbol2|  (row tem) < 50 and:[(row hum)>5]  ] for: #hum  as: #block1 ."
+		as: #block1;
+		addBlockMapping: [ :bulk | 
+			(bulk tem = 25.3 and: [ bulk hum = 73.3 ]) not ]
+		as: #block2;
+		addAverageMappingFor: #hum.
 
-	"		addAverageMappingFor: #hum;
-		addSumMappingFor: #tem;
-		addMaxMappingFor: #wind_ws_gust;
-		addMinMappingFor: #temperature_ws."
 	aggregated := agregator aggregate: col.
 	aggregated inspect.
 	self should: [ aggregated size = 3 ].
-
-	self should: [ (aggregated first value at: #block1) = true ]
+	self should: [ (aggregated first value at: #block1) = true ].
+	self should: [ (aggregated first value at: #block2) = false ]
 ]
 
 { #category : #private }
