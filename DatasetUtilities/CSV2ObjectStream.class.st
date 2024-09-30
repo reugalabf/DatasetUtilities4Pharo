@@ -1,3 +1,6 @@
+"
+Classes that takes a CSV file and tranform it to Dictionary, JSON or Domain Object (JSONSchema)
+"
 Class {
 	#name : #CSV2ObjectStream,
 	#superclass : #Object,

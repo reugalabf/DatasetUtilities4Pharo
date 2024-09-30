@@ -1,3 +1,6 @@
+"
+This class makes it possible to join two different datasets as implemented by class DatasetView.
+"
 Class {
 	#name : #DatasetJoiner,
 	#superclass : #Object,

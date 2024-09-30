@@ -1,3 +1,9 @@
+"
+Class operates over a collection of Domain Objects
+
+it can aggregate data hourly or daily
+it can also create new columns based on a given function implemented by a Block
+"
 Class {
 	#name : #DatasetAggregator,
 	#superclass : #Object,

@@ -1,3 +1,6 @@
+"
+This class is a decorator on top of Dictionary to be used by DatasetJoiner.
+"
 Class {
 	#name : #DatasetView,
 	#superclass : #Object,
