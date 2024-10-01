@@ -209,22 +209,21 @@ DatasetAggregator >> averageAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  
-	  value := bulk perform: assocKey key asSymbol.
-	  value isNumber ifTrue: 
-[	  outReg
-		  at: assocKey value
-		  ifPresent: [ :v | 
-			  v ifNotNil: [ 
-				  outReg at: assocKey value put: (v
-						   at: 1 put: ((v at: 1) + value);
-						   at: 2 put: (v at: 2) + 1;
-						   yourself) ] ]
-		  ifAbsent: [ 
-			  value ifNotNil: [ 
-				  outReg at: assocKey value put: { 
-						  value.
-						  1 } ] ]].
+	  value := self computeValueOf: assocKey key asSymbol from: bulk.
+	  value isNumber ifTrue: [ 
+		  outReg
+			  at: assocKey value
+			  ifPresent: [ :v | 
+				  v ifNotNil: [ 
+					  outReg at: assocKey value put: (v
+							   at: 1 put: (v at: 1) + value;
+							   at: 2 put: (v at: 2) + 1;
+							   yourself) ] ]
+			  ifAbsent: [ 
+				  value ifNotNil: [ 
+					  outReg at: assocKey value put: { 
+							  value.
+							  1 } ] ] ].
 	  outReg ]
 ]
 
@@ -257,12 +256,18 @@ DatasetAggregator >> collateAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := bulk perform: assocKey key.
+	  value := self computeValueOf: assocKey key asSymbol from: bulk.
 	  outReg
 		  at: assocKey value
 		  ifPresent: [ :v | outReg at: assocKey put: v , ' ' , value ]
 		  ifAbsent: [ outReg at: assocKey put: value ].
 	  outReg ]
+]
+
+{ #category : #private }
+DatasetAggregator >> computeValueOf: aSymbol from: bulk [
+
+	^ self subclassResponsibility
 ]
 
 { #category : #'api - export' }
@@ -307,7 +312,7 @@ DatasetAggregator >> dateSplitBlock [
 
 	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := bulk perform: assocKey key.
+	  value := self computeValueOf: assocKey key asSymbol from: bulk.
 	  value class = DateAndTime ifTrue: [ 
 		  outReg at: assocKey value put: value asDate.
 		  outReg ] ]
@@ -373,7 +378,7 @@ DatasetAggregator >> maxAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := bulk perform: assocKey key.
+	  value := self computeValueOf: assocKey key asSymbol from: bulk.
 	  value isNumber ifTrue: [ 
 		  outReg
 			  at: assocKey value
@@ -387,7 +392,7 @@ DatasetAggregator >> minAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := bulk perform: assocKey key.
+	  value := self computeValueOf: assocKey key asSymbol from: bulk.
 	  value isNumber ifTrue: [ 
 		  outReg
 			  at: assocKey value
@@ -414,7 +419,7 @@ DatasetAggregator >> sumAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := bulk perform: assocKey key.
+	  value := self computeValueOf: assocKey key asSymbol from: bulk.
 	  value isNumber ifTrue: [ 
 		  outReg
 			  at: assocKey value
@@ -428,7 +433,7 @@ DatasetAggregator >> timeSplitBlock [
 
 	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := bulk perform: assocKey key.
+	  value := self computeValueOf: assocKey key asSymbol from: bulk.
 	  value class = DateAndTime ifTrue: [ 
 		  outReg at: assocKey value put: value asTime.
 		  outReg ] ]

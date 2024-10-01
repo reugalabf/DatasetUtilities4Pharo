@@ -52,7 +52,7 @@ DatasetJoiner >> join [
 { #category : #API }
 DatasetJoiner >> joinAsCsv [
 
-	| outputStream |
+	| writer join outputStream |
 	outputStream := WriteStream on: String new.
 	self joinAsCsvOn: outputStream.
 	^ outputStream contents
@@ -64,7 +64,7 @@ DatasetJoiner >> joinAsCsvOn: outputStream [
 	| writer join |
 	join := self join.
 	writer := NeoCSVWriter on: outputStream.
-	writer nextPut: (self csvHeaderOf: join). "#( date rain )"
+	writer nextPut: (self csvHeaderOf: join). 
 
 	writer nextPutAll: join
 ]
@@ -91,4 +91,24 @@ DatasetJoiner >> joinAsJsonOn: outputStream [
 				  col
 					  add: each value;
 					  yourself ]))
+]
+
+{ #category : #API }
+DatasetJoiner >> joinOn: outputStream [
+
+	| keyStream |
+	keyStream := dsView1 keyStream.
+	[ keyStream atEnd ] whileFalse: [ 
+		| each record |
+		each := keyStream next.
+		record := Dictionary new.
+		record at: 'key' put: each printString.
+		dsView1 recordAt: each on: record.
+		dsView2 recordAt: each on: record.
+		header ifNil: [ 
+			header := self csvHeaderOf: record.
+			outputStream nextPutAll: header ].
+		result at: each put: record.
+		outputStream nextPutAll: record ].
+	^ outputStream
 ]

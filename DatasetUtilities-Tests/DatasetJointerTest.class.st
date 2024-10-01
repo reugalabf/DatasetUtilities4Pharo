@@ -101,7 +101,7 @@ DatasetJointerTest >> testTwoCompleteDatasets [
 { #category : #tests }
 DatasetJointerTest >> testTwoCompleteDatasetsAsCSV [
 
-	| viewH viewK csv |
+	| viewH viewK csv join expectedJoin |
 	viewH := self datasetViewH.
 
 
@@ -110,8 +110,14 @@ DatasetJointerTest >> testTwoCompleteDatasetsAsCSV [
 	csv := (DatasetJoiner new dsView1: viewH dsView2: viewK) joinAsCsv.
 
 	self should: [ 
-		(NeoCSVReader on: csv readStream) next
-		= (NeoCSVReader on: self expectedCSV readStream) next ]
+		(join := NeoCSVReader on: csv readStream) next
+		=
+		(expectedJoin := NeoCSVReader on: self expectedCSV readStream) next ].
+	
+	self should: [ 
+		(join ) upToEnd  
+		=
+		(expectedJoin ) upToEnd  ]
 ]
 
 { #category : #tests }

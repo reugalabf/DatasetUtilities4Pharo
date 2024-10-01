@@ -1,11 +1,11 @@
 Class {
-	#name : #DatasetAggregatorTest,
+	#name : #ObjectAggregatorTest,
 	#superclass : #TestCase,
 	#category : #'DatasetUtilities-Tests'
 }
 
 { #category : #tests }
-DatasetAggregatorTest >> testHourlyMultiMappings [
+ObjectAggregatorTest >> testHourlyMultiMappings [
 	| col agregator |
 	col := (NeoJSONReader on: self threeEntriesJson readStream) 
 		       nextListAs: FlareSenseDevelopment.
@@ -14,7 +14,7 @@ DatasetAggregatorTest >> testHourlyMultiMappings [
 
 
 
-	agregator := DatasetAggregator new.
+	agregator := ObjectAggregator new.
 	agregator
 		keyAspect: #when;
 		hourly;
@@ -30,7 +30,7 @@ DatasetAggregatorTest >> testHourlyMultiMappings [
 ]
 
 { #category : #tests }
-DatasetAggregatorTest >> testHourlyMultiMappingsReification [
+ObjectAggregatorTest >> testHourlyMultiMappingsReification [
 	| col agregator rsp aggregated |
 	rsp := FlareSenseRawEndpointClient new transformJSONFrom:
 		       self twoRawEntriesJson readStream.
@@ -41,7 +41,7 @@ DatasetAggregatorTest >> testHourlyMultiMappingsReification [
 	self should: [ col size = 3 ].
 	self should: [ 
 		col first when printString = '2023-11-28T13:03:38.897+00:00' ].
-	agregator := DatasetAggregator new.
+	agregator := ObjectAggregator new.
 	agregator
 		keyAspect: #when;
 		hourly;
@@ -58,7 +58,7 @@ DatasetAggregatorTest >> testHourlyMultiMappingsReification [
 ]
 
 { #category : #tests }
-DatasetAggregatorTest >> testHourlyMultiMappingsToCSV [
+ObjectAggregatorTest >> testHourlyMultiMappingsToCSV [
 
 	| col agregator csv array |
 	col := (NeoJSONReader on: self threeEntriesJson readStream) 
@@ -67,7 +67,7 @@ DatasetAggregatorTest >> testHourlyMultiMappingsToCSV [
 	self should: [ col size = 3 ].
 
 
-	agregator := DatasetAggregator new.
+	agregator := ObjectAggregator new.
 	agregator
 		keyAspect: #when;
 		hourly;
@@ -88,7 +88,7 @@ DatasetAggregatorTest >> testHourlyMultiMappingsToCSV [
 ]
 
 { #category : #tests }
-DatasetAggregatorTest >> testHourlyMultiMappingsToJSON [
+ObjectAggregatorTest >> testHourlyMultiMappingsToJSON [
 
 	| col agregator  json dicts |
 	col := (NeoJSONReader on: self threeEntriesJson readStream) 
@@ -96,7 +96,7 @@ DatasetAggregatorTest >> testHourlyMultiMappingsToJSON [
 
 	self should: [ col size = 3 ].
 
-	agregator := DatasetAggregator new.
+	agregator := ObjectAggregator new.
 	json := agregator
 		        keyAspect: #when;
 		        hourly;
@@ -113,7 +113,7 @@ DatasetAggregatorTest >> testHourlyMultiMappingsToJSON [
 ]
 
 { #category : #tests }
-DatasetAggregatorTest >> testMultiMappingsFilter [
+ObjectAggregatorTest >> testMultiMappingsFilter [
 
 	| col agregator rsp aggregated |
 	rsp := FlareSenseRawEndpointClient new transformJSONFrom:
@@ -125,7 +125,7 @@ DatasetAggregatorTest >> testMultiMappingsFilter [
 	self should: [ col size = 3 ].
 	self should: [ 
 		col first when printString = '2023-11-28T13:03:38.897+00:00' ].
-	agregator := DatasetAggregator new.
+	agregator := ObjectAggregator new.
 	agregator
 		afterDateandTime: (DateAndTime fromString: '2023-11-28T13:03:38.897Z') ;
 		keyAspect: #when;
@@ -144,7 +144,7 @@ DatasetAggregatorTest >> testMultiMappingsFilter [
 ]
 
 { #category : #tests }
-DatasetAggregatorTest >> testMultiMappingsFilterHourly [
+ObjectAggregatorTest >> testMultiMappingsFilterHourly [
 
 	| col agregator rsp aggregated |
 	rsp := FlareSenseRawEndpointClient new transformJSONFrom:
@@ -156,7 +156,7 @@ DatasetAggregatorTest >> testMultiMappingsFilterHourly [
 	self should: [ col size = 3 ].
 	self should: [ 
 		col first when printString = '2023-11-28T13:03:38.897+00:00' ].
-	agregator := DatasetAggregator new.
+	agregator := ObjectAggregator new.
 	agregator
 		afterDateandTime:  (DateAndTime fromString: '2023-11-28T12:03:38.897Z') ;
 		keyAspect: #when;
@@ -176,7 +176,7 @@ DatasetAggregatorTest >> testMultiMappingsFilterHourly [
 ]
 
 { #category : #tests }
-DatasetAggregatorTest >> testMultiMappingsReification [
+ObjectAggregatorTest >> testMultiMappingsReification [
 
 	| col agregator rsp aggregated |
 	rsp := FlareSenseRawEndpointClient new transformJSONFrom:
@@ -188,7 +188,7 @@ DatasetAggregatorTest >> testMultiMappingsReification [
 	self should: [ col size = 3 ].
 	self should: [ 
 		col first when printString = '2023-11-28T13:03:38.897+00:00' ].
-	agregator := DatasetAggregator new.
+	agregator := ObjectAggregator new.
 	agregator
 		keyAspect: #when;
 		addAverageMappingFor: #hum;
@@ -206,7 +206,7 @@ DatasetAggregatorTest >> testMultiMappingsReification [
 ]
 
 { #category : #tests }
-DatasetAggregatorTest >> testSplitDate [
+ObjectAggregatorTest >> testSplitDate [
 
 	| col agregator rsp aggregated |
 	rsp := FlareSenseRawEndpointClient new transformJSONFrom:
@@ -218,7 +218,7 @@ DatasetAggregatorTest >> testSplitDate [
 	self should: [ col size = 3 ].
 	self should: [ 
 		col first when printString = '2023-11-28T13:03:38.897+00:00' ].
-	agregator := DatasetAggregator new.
+	agregator := ObjectAggregator new.
 	agregator
 		afterDateandTime: (DateAndTime fromString: '2023-11-28T13:03:38.897Z') ;
 		keyAspect: #when;
@@ -241,7 +241,7 @@ DatasetAggregatorTest >> testSplitDate [
 ]
 
 { #category : #tests }
-DatasetAggregatorTest >> testTwoBlocksHourlyMappings [
+ObjectAggregatorTest >> testTwoBlocksHourlyMappings [
 
 	"25.3,""hum"":73.3,"
 
@@ -251,7 +251,7 @@ DatasetAggregatorTest >> testTwoBlocksHourlyMappings [
 
 	self should: [ col size = 3 ].
 
-	agregator := DatasetAggregator new.
+	agregator := ObjectAggregator new.
 	agregator
 		keyAspect: #when;
 		hourly;
@@ -268,12 +268,12 @@ DatasetAggregatorTest >> testTwoBlocksHourlyMappings [
 ]
 
 { #category : #private }
-DatasetAggregatorTest >> threeEntriesJson [
+ObjectAggregatorTest >> threeEntriesJson [
 ^ '[{"wind_ws_gust":36,"when":"2023-11-28T13:03:38.897Z","timeDeltaM":30,"humidity_ws":69.4,"nodeId":"3c610528e00c","wind_wspeed_s":17.8,"tem":25.3,"hum":73.3,"pressure_ws":1012,"raing":0,"temperature_ws":25.3,"fw":"Miramar-sep2022","wind_direction_ws":0.6},{"wind_ws_gust":11.6,"when":"2023-11-28T13:38:45.393Z","timeDeltaM":30,"humidity_ws":65.5,"nodeId":"3c610528e00c","wind_wspeed_s":4.4,"tem":28.1,"hum":66.7,"pressure_ws":1011.9,"raing":0,"temperature_ws":26.8,"fw":"Miramar-sep2022","wind_direction_ws":0},{"wind_ws_gust":28.8,"when":"2023-11-28T14:08:45.393+00:00","timeDeltaM":30,"humidity_ws":66.3,"nodeId":"3c610528e00c","wind_wspeed_s":14.4,"tem":26.1,"hum":71.6,"pressure_ws":1011.7,"raing":0,"temperature_ws":26.5,"fw":"Miramar-sep2022","wind_direction_ws":1.2}]'
 ]
 
 { #category : #private }
-DatasetAggregatorTest >> twoMultiRawEntriesJson [
+ObjectAggregatorTest >> twoMultiRawEntriesJson [
 ^ '[{
 "fw": "Miramar-sep2022",
 "hum": [
@@ -356,7 +356,7 @@ DatasetAggregatorTest >> twoMultiRawEntriesJson [
 ]
 
 { #category : #private }
-DatasetAggregatorTest >> twoRawEntriesJson [
+ObjectAggregatorTest >> twoRawEntriesJson [
 ^ '[{
 "fw": "Miramar-sep2022",
 "hum": [
