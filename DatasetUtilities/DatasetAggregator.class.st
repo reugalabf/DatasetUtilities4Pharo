@@ -157,7 +157,7 @@ DatasetAggregator >> aggregateFromStream: readStream [
 	[ readStream atEnd ] whileFalse: [ 
 		| each key |
 		each := readStream next.
-		key := keyBlock value: (each perform: keyAspect).
+		key := keyBlock value: (self computeValueOf: keyAspect  from: each).
 		(filterBlock value: key) ifTrue: [ 
 			self applyMappingsTo: each key: key ] ].
 

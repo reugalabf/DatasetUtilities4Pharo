@@ -40,9 +40,9 @@ DatasetJoiner >> join [
 	kStream := dsView1 keyStream.
 	[ kStream atEnd ] whileFalse: [ 
 		|each record |
-		each:= kStream next.
+		each:= (kStream next)"printString".
 		record := Dictionary new.
-		record at: 'key' put: each printString.
+		record at: 'key' put: each .
 		dsView1 recordAt: each on: record.
 		dsView2 recordAt: each on: record.
 		result at: each put: record ].

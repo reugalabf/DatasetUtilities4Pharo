@@ -9,7 +9,8 @@ Class {
 		'headers',
 		'filterBlock',
 		'keyIndex',
-		'filteredHeaders'
+		'filteredHeaders',
+		'recordReifyBlock'
 	],
 	#category : #DatasetUtilities
 }
@@ -28,6 +29,16 @@ CSV2ObjectStream class >> source: readStream filteredHeaders: array [
 	^ self new
 		  sourceStream: readStream;
 		  filteredHeaders: array;
+		  yourself
+]
+
+{ #category : #accessing }
+CSV2ObjectStream class >> source: readStream filteredHeaders: array recordReifyBlock: aBlock [
+
+	^ self new
+		  sourceStream: readStream;
+		  filteredHeaders: array;
+		  recordReifyBlock: aBlock;
 		  yourself
 ]
 
@@ -75,8 +86,9 @@ CSV2ObjectStream >> headers [
 CSV2ObjectStream >> initialize [
 
 	keyIndex := 0.
-	filterBlock:=[:row| true].
-	filteredHeaders := Array new
+	filterBlock := [ :row | true ].
+	filteredHeaders := Array new.
+	recordReifyBlock := [ :record | record ]
 ]
 
 { #category : #accessing }
@@ -107,7 +119,7 @@ CSV2ObjectStream >> next [
 			 filteredHeaders includes: (headers at: idx) ])
 			ifFalse: [ self error: 'Missing header' ]
 			ifTrue: [ record at: (headers at: idx) asSymbol put: (row at: idx) ] ]."
-	^ self convertFromDictionary: record
+	^ self convertFromDictionary: (recordReifyBlock  value: record)
 ]
 
 { #category : #'stream protocol' }
@@ -118,6 +130,12 @@ CSV2ObjectStream >> nextFilteredRow [
 	[ sourceStream atEnd or: [ row notNil ] ] whileFalse: [ 
 		row := self valueFilterBlockWithRow: sourceStream next ].
 	^ row
+]
+
+{ #category : #accessing }
+CSV2ObjectStream >> recordReifyBlock: anObject [
+
+	recordReifyBlock := anObject
 ]
 
 { #category : #accessing }
