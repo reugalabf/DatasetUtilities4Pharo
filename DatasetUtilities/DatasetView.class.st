@@ -50,9 +50,9 @@ DatasetView >> name: aString source: dict keyBlock: aBlock [
 { #category : #accessing }
 DatasetView >> recordAt: key on: aDictionary [
 
-	| record |
-	record := source detect: [ :each | key =( keyBlock value: each) ]. " it needs to get one entry for the key!!!!"
-
-	columns do: [ :each | 
-		aDictionary at: name , '.' , each put: (record at: each) ]
+	source
+		detect: [ :each | key = (keyBlock value: each) ]
+		ifFound: [ :record | 
+			columns do: [ :each | 
+				aDictionary at: name , '.' , each put: (record at: each) ] ]
 ]

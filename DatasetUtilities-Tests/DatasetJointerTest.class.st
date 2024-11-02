@@ -31,6 +31,19 @@ DatasetJointerTest >> datasetViewK [
 ]
 
 { #category : #tests }
+DatasetJointerTest >> datasetViewKFull [
+
+	^ (DatasetView
+		   name: 'K'
+		   source:
+			   ((CSV2DictionaryStream source: self kCSVDataset readStream) 
+				    filteredHeaders: #( a r s t )) contents
+		   keyBlock: [ :entry | entry at: 'a' ])
+		  columns: #( 'r' 't' 's' );
+		  yourself
+]
+
+{ #category : #tests }
 DatasetJointerTest >> datasetViewQ [
 
 	^ (DatasetView
@@ -179,4 +192,23 @@ DatasetJointerTest >> testTwoCompleteNoMatchRowDatasets [
 
 	self should: [ (join at: 'a1') keys size = 4 ].
 	self should: [ (join at: 'a1') keys = #( 'H.b' 'key' 'Q.rr' 'Q.t_t' ) ]
+]
+
+{ #category : #tests }
+DatasetJointerTest >> testTwoIncompleteDatasets [
+
+	| viewQ viewK join |
+	
+	viewQ := self datasetViewQ.
+
+
+	viewK := self datasetViewKFull .
+
+	join := (DatasetJoiner new dsView1: viewQ dsView2: viewK) join.
+	self should: [ join size = 4 ].
+	self should: [ join keys = #( 'a1' 'a2' 'a3' 'a4') ].
+
+	self should: [ (join at: 'a1') keys size = 6 ].
+	self should: [ (join at: 'a1') keys asSet = #( 'Q.t_t' 'Q.rr' 'key' 'K.r' 'K.t' 'K.s')asSet ].
+	
 ]
