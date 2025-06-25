@@ -7,5 +7,12 @@ Class {
 { #category : #private }
 DictionaryAggregator >> computeValueOf: aSymbol from: bulk [
 
-	^ bulk at: aSymbol
+	^ aSymbol = keyAspect
+		  ifTrue: [ 
+			  | value |
+			  value := bulk at: aSymbol.
+			  value isString
+				  ifTrue: [ DateAndTime fromString: value ]
+				  ifFalse: [ value ] ]
+		  ifFalse: [ bulk at: aSymbol ]
 ]

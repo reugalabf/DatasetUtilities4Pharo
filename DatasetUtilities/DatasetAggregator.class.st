@@ -19,6 +19,20 @@ Class {
 }
 
 { #category : #api }
+DatasetAggregator >> addAppendMappingFor: aSymbol [
+
+	self addAppendMappingFor: aSymbol as: aSymbol
+]
+
+{ #category : #api }
+DatasetAggregator >> addAppendMappingFor: aSymbol as: anotherSymbol [
+
+	mappings
+		at: aSymbol -> anotherSymbol
+		put: self collateAggregationBlock
+]
+
+{ #category : #api }
 DatasetAggregator >> addAverageMappingFor: aSymbol [
 
 	self addAverageMappingFor: aSymbol as: aSymbol
@@ -103,8 +117,7 @@ DatasetAggregator >> addTimeMappingFor: aSymbol as: anotherSymbol [
 { #category : #accessing }
 DatasetAggregator >> afterDateandTime: dt [
 
-	^ self filterBlock: [ :key | 
-		  key > dt ]
+	^ self filterBlock: [ :key | key > dt ]
 ]
 
 { #category : #api }
@@ -215,23 +228,23 @@ DatasetAggregator >> averageAggregationBlock [
 			  at: assocKey value
 			  ifPresent: [ :v | 
 				  v ifNotNil: [ 
-					  outReg at: assocKey value put: (v
-							   at: 1 put: (v at: 1) + value;
-							   at: 2 put: (v at: 2) + 1;
-							   yourself) ] ]
+					  outReg at: assocKey value put: ( ((v key) + value)->((v value) + 1));
+							   yourself ] ]
 			  ifAbsent: [ 
 				  value ifNotNil: [ 
-					  outReg at: assocKey value put: { 
-							  value.
-							  1 } ] ] ].
+					  outReg at: assocKey value put:  
+							  value->1.
+							   ] ] ].
 	  outReg ]
 ]
 
 { #category : #accessing }
 DatasetAggregator >> beforeDateandTime: dt [
 
-	^ self filterBlock: [ :each | 
-		  (DateAndTime fromString: (each at: 'when')) < dt ]
+	"	^ self filterBlock: [ :each | 
+		  (DateAndTime fromString: (each at: 'when')) < dt ]"
+
+	^ self filterBlock: [ :each | each < dt ]
 ]
 
 { #category : #accessing }
@@ -299,7 +312,7 @@ DatasetAggregator >> daily [
 	            DateAndTime
 		            year: dt year
 		            month: dt month
-		            day: dt day
+		            day: dt dayOfMonth 
 		            hour: 0
 		            minute: 0
 		            second: 0
@@ -408,8 +421,8 @@ DatasetAggregator >> reifyValues: aggregatedDataset [
 		  | dict |
 		  (dict := each value) keysDo: [ :key | 
 			  | v |
-			  (v := dict at: key) isArray ifTrue: [ 
-				  dict at: key put: (v first / v last round: 1) asFloat ] ].
+			  (v := dict at: key) isAssociation  ifTrue: [ 
+				  dict at: key put: (v key / v value round: 1) asFloat ] ].
 
 		  self applyBlockMappingsTo: each value key: each key ]
 ]
