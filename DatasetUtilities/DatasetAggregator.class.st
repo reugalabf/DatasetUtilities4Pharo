@@ -29,7 +29,7 @@ DatasetAggregator >> addAppendMappingFor: aSymbol as: anotherSymbol [
 
 	mappings
 		at: aSymbol -> anotherSymbol
-		put: self collateAggregationBlock
+		put: self appendAggregationBlock
 ]
 
 { #category : #api }
@@ -190,6 +190,19 @@ DatasetAggregator >> aggregateJSON: bulkCollection [
 ]
 
 { #category : #private }
+DatasetAggregator >> appendAggregationBlock [
+
+	^ [ :bulk :outReg :assocKey | 
+	  | value |
+	  value := self computeValueOf: assocKey key asSymbol from: bulk.
+	  outReg
+		  at: assocKey value
+		  ifPresent: [ :v | outReg at: assocKey value put: v , "' ' ," value ]
+		  ifAbsent: [ outReg at: assocKey value put: value ].
+	  outReg ]
+]
+
+{ #category : #private }
 DatasetAggregator >> applyBlockMappingsTo: row key: key [
 
 	blockMappings  keysAndValuesDo: [ :k :map | 
@@ -261,19 +274,6 @@ DatasetAggregator >> blockAggregationBlockWith: aBlock [
 
 	^ [ :bulk :outReg :assocKey | 
 	  outReg at: assocKey value put: (aBlock value: bulk).
-	  outReg ]
-]
-
-{ #category : #private }
-DatasetAggregator >> collateAggregationBlock [
-
-	^ [ :bulk :outReg :assocKey | 
-	  | value |
-	  value := self computeValueOf: assocKey key asSymbol from: bulk.
-	  outReg
-		  at: assocKey value
-		  ifPresent: [ :v | outReg at: assocKey put: v , ' ' , value ]
-		  ifAbsent: [ outReg at: assocKey put: value ].
 	  outReg ]
 ]
 

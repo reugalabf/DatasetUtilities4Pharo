@@ -22,6 +22,15 @@ DatasetView class >> name: aString source: dict keyBlock: aBlock [
 ]
 
 { #category : #accessing }
+DatasetView >> asDictionarySource [
+
+	^ source collect: [ :row | 
+		  | result |
+		  result := Dictionary new.
+		  columns do: [ :each | result at: each put: (row at: each) ] . result]
+]
+
+{ #category : #accessing }
 DatasetView >> columns [
 
 	^ columns
