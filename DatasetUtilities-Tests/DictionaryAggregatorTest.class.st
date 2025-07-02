@@ -185,7 +185,7 @@ DictionaryAggregatorTest >> testTwoHourlyAppendMappingsIntoDataset [
 		keyAspect: #when;
 		hourly;
 		addAppendMappingFor: #lqi_315;
-		addBlockMapping: [ :row | self halt. (row at: #lqi_315) sum -> (row at: #lqi_315) size   ] as: #avg_315
+		addBlockMapping: [ :row | (row at: #lqi_315) average asFloat round:2 ] as: #avg_315
 		";
 		addSumMappingFor: #tem;
 		addMaxMappingFor: #wind_ws_gust;
@@ -215,8 +215,8 @@ dtView :=
 		  columns: #( 'avg_315' 'when' ).
 		
 	 
-	self should:[(dtView asDictionarySource first at: #avg_315) = (793/20)].
-	self should:[(dtView asDictionarySource last at: #avg_315) = (79/2)]
+	self should:[(dtView asDictionarySource first at: #avg_315) = 39.65].
+	self should:[(dtView asDictionarySource last at: #avg_315) = 39.5]
 ]
 
 { #category : #'as yet unclassified' }

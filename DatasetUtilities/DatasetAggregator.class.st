@@ -131,6 +131,7 @@ DatasetAggregator >> aggregate: bulkCollection [
 DatasetAggregator >> aggregate: bulkCollection csvOn: outputStream [
 
 	| writer |
+
 	writer := NeoCSVWriter on: outputStream.
 	writer nextPut: self csvHeader. "#( date rain )"
 	writer addObjectFields: #( key ).
@@ -154,6 +155,14 @@ DatasetAggregator >> aggregate: bulkCollection jsonOn: outputStream [
 					  col
 						  add: each value;
 						  yourself ]))
+]
+
+{ #category : #api }
+DatasetAggregator >> aggregate: bulkCollection onCollection: result [
+
+	(self aggregate: bulkCollection) do: [ :each | 
+		result addLast: each value ].
+	^ result
 ]
 
 { #category : #'api - export' }
@@ -265,8 +274,8 @@ DatasetAggregator >> between: dt1 and: dt2 [
 
 	dt1 < dt2 ifFalse: [ self error: 'Period out of order' ].
 	^ self filterBlock: [ :each | 
-		  (DateAndTime fromString: (each at: 'when')) < dt2 and: [ 
-			  (DateAndTime fromString: (each at: 'when')) > dt1 ] ]
+		  each < dt2 and: [ 
+			  each > dt1 ] ]
 ]
 
 { #category : #private }
