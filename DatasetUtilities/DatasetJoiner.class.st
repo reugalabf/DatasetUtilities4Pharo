@@ -2,38 +2,39 @@
 This class makes it possible to join two different datasets as implemented by class DatasetView.
 "
 Class {
-	#name : #DatasetJoiner,
-	#superclass : #Object,
+	#name : 'DatasetJoiner',
+	#superclass : 'Object',
 	#instVars : [
 		'dsView1',
 		'dsView2',
 		'result',
 		'header'
 	],
-	#category : #DatasetUtilities
+	#category : 'DatasetUtilities',
+	#package : 'DatasetUtilities'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetJoiner >> csvHeaderOf: join [
 
 	^ join anyOne value keys
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 DatasetJoiner >> dsView1: view1 dsView2: view2 [
 
 	dsView1 := view1.
 	dsView2 := view2
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 DatasetJoiner >> initialize [
 
 	result := Dictionary new.
 	^ self
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 DatasetJoiner >> join [
 
 	| kStream |
@@ -49,7 +50,7 @@ DatasetJoiner >> join [
 	^result
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 DatasetJoiner >> joinAsCsv [
 
 	| writer join outputStream |
@@ -58,7 +59,7 @@ DatasetJoiner >> joinAsCsv [
 	^ outputStream contents
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 DatasetJoiner >> joinAsCsvOn: outputStream [
 
 	| writer join |
@@ -69,7 +70,7 @@ DatasetJoiner >> joinAsCsvOn: outputStream [
 	writer nextPutAll: join
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 DatasetJoiner >> joinAsJson [
 
 	| outputStream |
@@ -83,7 +84,7 @@ DatasetJoiner >> joinAsJson [
 	^ outputStream contents
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 DatasetJoiner >> joinAsJsonOn: outputStream [
 
 	outputStream nextPutAll: (NeoJSONWriter toStringPretty:
@@ -93,7 +94,7 @@ DatasetJoiner >> joinAsJsonOn: outputStream [
 					  yourself ]))
 ]
 
-{ #category : #API }
+{ #category : 'API' }
 DatasetJoiner >> joinOn: outputStream [
 
 	| keyStream |

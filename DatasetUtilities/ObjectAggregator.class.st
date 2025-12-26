@@ -1,10 +1,11 @@
 Class {
-	#name : #ObjectAggregator,
-	#superclass : #DatasetAggregator,
-	#category : #DatasetUtilities
+	#name : 'ObjectAggregator',
+	#superclass : 'DatasetAggregator',
+	#category : 'DatasetUtilities',
+	#package : 'DatasetUtilities'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 ObjectAggregator >> computeValueOf: aSymbol from: bulk [
 
 	^ bulk perform: aSymbol
