@@ -24,7 +24,13 @@ CSV2JSONSchemaStream >> convertFromDictionary: record [
 ]
 
 { #category : #'stream protocol' }
-CSV2JSONSchemaStream >> nextListAs: schema [
+CSV2JSONSchemaStream >> nextList [
+
+	^ self nextListAs: schema
+]
+
+{ #category : #'stream protocol' }
+CSV2JSONSchemaStream >> nextListAs: anSchema [
 
 	"	| record row |
 	row := sourceStream next.
@@ -36,7 +42,7 @@ CSV2JSONSchemaStream >> nextListAs: schema [
 	| col reader |
 	col := OrderedCollection new.
 	reader := NeoJSONReader on: sourceStream.
-	[ self atEnd ] whileFalse: [ col addLast: (self nextAs: schema) ].
+	[ reader atEnd ] whileFalse: [ col addLast: (reader nextAs: anSchema ) ].
 	^ col
 ]
 
