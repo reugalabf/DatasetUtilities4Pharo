@@ -5,8 +5,8 @@ it can aggregate data hourly or daily
 it can also create new columns based on a given function implemented by a Block
 "
 Class {
-	#name : #DatasetAggregator,
-	#superclass : #Object,
+	#name : 'DatasetAggregator',
+	#superclass : 'Object',
 	#instVars : [
 		'aggregation',
 		'mappings',
@@ -15,16 +15,17 @@ Class {
 		'keyAspect',
 		'filterBlock'
 	],
-	#category : #DatasetUtilities
+	#category : 'DatasetUtilities',
+	#package : 'DatasetUtilities'
 }
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addAppendMappingFor: aSymbol [
 
 	self addAppendMappingFor: aSymbol as: aSymbol
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addAppendMappingFor: aSymbol as: anotherSymbol [
 
 	mappings
@@ -32,13 +33,13 @@ DatasetAggregator >> addAppendMappingFor: aSymbol as: anotherSymbol [
 		put: self appendAggregationBlock
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addAverageMappingFor: aSymbol [
 
 	self addAverageMappingFor: aSymbol as: aSymbol
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addAverageMappingFor: aSymbol as: anotherSymbol [
 
 	mappings
@@ -46,7 +47,7 @@ DatasetAggregator >> addAverageMappingFor: aSymbol as: anotherSymbol [
 		put: self averageAggregationBlock
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addBlockMapping: aBlock as: aSymbol [
 
 	blockMappings 
@@ -54,80 +55,80 @@ DatasetAggregator >> addBlockMapping: aBlock as: aSymbol [
 		put: (self blockAggregationBlockWith: aBlock)
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addDateMappingFor: aSymbol [
 
 	self addDateMappingFor: aSymbol as: #Date
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addDateMappingFor: aSymbol as: anotherSymbol [
 
 	mappings at: aSymbol -> anotherSymbol put: self dateSplitBlock
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addMaxMappingFor: aSymbol [
 
 	self addMaxMappingFor: aSymbol as: aSymbol
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addMaxMappingFor: aSymbol as: anotherSymbol [
 
 	mappings at: aSymbol -> anotherSymbol put: self maxAggregationBlock
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addMinMappingFor: aSymbol [
 
 	self addMinMappingFor: aSymbol as: aSymbol
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addMinMappingFor: aSymbol as: anotherSymbol [
 
 	mappings at: aSymbol -> anotherSymbol put: self minAggregationBlock
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addSumMappingFor: aSymbol [
 
 	self addSumMappingFor: aSymbol as: aSymbol
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addSumMappingFor: aSymbol as: anotherSymbol [
 
 	mappings at: aSymbol -> anotherSymbol put: self sumAggregationBlock
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addTimeMappingFor: aSymbol [
 
 	self addTimeMappingFor: aSymbol as: #Time
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> addTimeMappingFor: aSymbol as: anotherSymbol [
 
 	mappings at: aSymbol -> anotherSymbol put: self timeSplitBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetAggregator >> afterDateandTime: dt [
 
 	^ self filterBlock: [ :key | key > dt ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> aggregate: bulkCollection [
 
 	^ self reifyValues:
 		  (self  aggregateFromStream: (ReadStream on: bulkCollection))
 ]
 
-{ #category : #'api - export' }
+{ #category : 'api - export' }
 DatasetAggregator >> aggregate: bulkCollection csvOn: outputStream [
 
 	| writer |
@@ -139,13 +140,13 @@ DatasetAggregator >> aggregate: bulkCollection csvOn: outputStream [
 	writer nextPutAll: (self aggregate: bulkCollection)
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> aggregate: bulkCollection do: aBlock [
 
 	(self aggregate: bulkCollection) do: aBlock
 ]
 
-{ #category : #'api - export' }
+{ #category : 'api - export' }
 DatasetAggregator >> aggregate: bulkCollection jsonOn: outputStream [
 
 	outputStream nextPutAll:
@@ -157,7 +158,7 @@ DatasetAggregator >> aggregate: bulkCollection jsonOn: outputStream [
 						  yourself ]))
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> aggregate: bulkCollection onCollection: result [
 
 	(self aggregate: bulkCollection) do: [ :each | 
@@ -165,14 +166,14 @@ DatasetAggregator >> aggregate: bulkCollection onCollection: result [
 	^ result
 ]
 
-{ #category : #'api - export' }
+{ #category : 'api - export' }
 DatasetAggregator >> aggregateCSV: bulkCollection [
 
 	^ String streamContents: [ :stream | 
 		  self aggregate: bulkCollection csvOn: stream ]
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 DatasetAggregator >> aggregateFromStream: readStream [
 
 	| result |
@@ -191,14 +192,14 @@ DatasetAggregator >> aggregateFromStream: readStream [
 	^ result
 ]
 
-{ #category : #'api - export' }
+{ #category : 'api - export' }
 DatasetAggregator >> aggregateJSON: bulkCollection [
 
 	^ String streamContents: [ :stream | 
 		  self aggregate: bulkCollection jsonOn: stream ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> appendAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
@@ -211,7 +212,7 @@ DatasetAggregator >> appendAggregationBlock [
 	  outReg ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> applyBlockMappingsTo: row key: key [
 
 	blockMappings  keysAndValuesDo: [ :k :map | 
@@ -225,7 +226,7 @@ DatasetAggregator >> applyBlockMappingsTo: row key: key [
 					put: (map value: row value: Dictionary new value: k) ] ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> applyMappingsTo: row key: key [
 
 	mappings keysAndValuesDo: [ :k :map | 
@@ -239,7 +240,7 @@ DatasetAggregator >> applyMappingsTo: row key: key [
 					put: (map value: row value: Dictionary new value: k) ] ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> averageAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
@@ -260,7 +261,7 @@ DatasetAggregator >> averageAggregationBlock [
 	  outReg ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetAggregator >> beforeDateandTime: dt [
 
 	"	^ self filterBlock: [ :each | 
@@ -269,7 +270,7 @@ DatasetAggregator >> beforeDateandTime: dt [
 	^ self filterBlock: [ :each | each < dt ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetAggregator >> between: dt1 and: dt2 [
 
 	dt1 < dt2 ifFalse: [ self error: 'Period out of order' ].
@@ -278,7 +279,7 @@ DatasetAggregator >> between: dt1 and: dt2 [
 			  each > dt1 ] ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> blockAggregationBlockWith: aBlock [
 
 	^ [ :bulk :outReg :assocKey | 
@@ -286,13 +287,13 @@ DatasetAggregator >> blockAggregationBlockWith: aBlock [
 	  outReg ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> computeValueOf: aSymbol from: bulk [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #'api - export' }
+{ #category : 'api - export' }
 DatasetAggregator >> configureCSVFieldsOn: writer [
 
 	mappings keysDo: [ :assocKey | 
@@ -305,7 +306,7 @@ DatasetAggregator >> configureCSVFieldsOn: writer [
 				ifFalse: [ obj ]" ] ]
 ]
 
-{ #category : #'api - export' }
+{ #category : 'api - export' }
 DatasetAggregator >> csvHeader [
 
 	| header |
@@ -314,7 +315,7 @@ DatasetAggregator >> csvHeader [
 	^ header
 ]
 
-{ #category : #'api - frequency' }
+{ #category : 'api - frequency' }
 DatasetAggregator >> daily [
 
 	keyBlock := [ :dt | 
@@ -329,7 +330,7 @@ DatasetAggregator >> daily [
 		            offset: dt offset ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> dateSplitBlock [
 
 	^ [ :bulk :outReg :assocKey | 
@@ -340,19 +341,19 @@ DatasetAggregator >> dateSplitBlock [
 		  outReg ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetAggregator >> filterBlock [
 
 	^ filterBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetAggregator >> filterBlock: anObject [
 
 	filterBlock := anObject
 ]
 
-{ #category : #'api - frequency' }
+{ #category : 'api - frequency' }
 DatasetAggregator >> hourly [
 
 	keyBlock := [ :dt | 
@@ -367,7 +368,7 @@ DatasetAggregator >> hourly [
 		            offset: dt offset ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 DatasetAggregator >> initialize [
 
 	aggregation := Dictionary new.
@@ -377,25 +378,25 @@ DatasetAggregator >> initialize [
 	filterBlock := [ :dt | true ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetAggregator >> keyAspect [
 
 	^ keyAspect
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetAggregator >> keyAspect: anObject [
 
 	keyAspect := anObject
 ]
 
-{ #category : #'api - export' }
+{ #category : 'api - export' }
 DatasetAggregator >> keys [
 
 	^ mappings keys collect: [ :each | each value ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> maxAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
@@ -409,7 +410,7 @@ DatasetAggregator >> maxAggregationBlock [
 	  outReg ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> minAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
@@ -423,7 +424,7 @@ DatasetAggregator >> minAggregationBlock [
 	  outReg ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> reifyValues: aggregatedDataset [
 
 	^ aggregatedDataset do: [ :each | 
@@ -436,7 +437,7 @@ DatasetAggregator >> reifyValues: aggregatedDataset [
 		  self applyBlockMappingsTo: each value key: each key ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> sumAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
@@ -450,7 +451,7 @@ DatasetAggregator >> sumAggregationBlock [
 	  outReg ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregator >> timeSplitBlock [
 
 	^ [ :bulk :outReg :assocKey | 
@@ -461,7 +462,7 @@ DatasetAggregator >> timeSplitBlock [
 		  outReg ] ]
 ]
 
-{ #category : #'api - export' }
+{ #category : 'api - export' }
 DatasetAggregator >> valueAt: aSymbol from: aRow [
 
 	^ aRow at: (self keys indexOf: aSymbol)

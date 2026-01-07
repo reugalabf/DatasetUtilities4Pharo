@@ -2,18 +2,19 @@
 This class is a decorator on top of Dictionary to be used by DatasetJoiner.
 "
 Class {
-	#name : #DatasetView,
-	#superclass : #Object,
+	#name : 'DatasetView',
+	#superclass : 'Object',
 	#instVars : [
 		'name',
 		'keyBlock',
 		'columns',
 		'source'
 	],
-	#category : #DatasetUtilities
+	#category : 'DatasetUtilities',
+	#package : 'DatasetUtilities'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 DatasetView class >> name: aString source: dict keyBlock: aBlock [
 
 	^ self new
@@ -21,7 +22,7 @@ DatasetView class >> name: aString source: dict keyBlock: aBlock [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetView >> asDictionarySource [
 
 	^ source collect: [ :row | 
@@ -30,25 +31,25 @@ DatasetView >> asDictionarySource [
 		  columns do: [ :each | result at: each put: (row at: each) ] . result]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetView >> columns [
 
 	^ columns
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetView >> columns: anObject [
 
 	columns := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetView >> keyStream [
 
 	^ (source collect: [ :each | keyBlock value: each ]) readStream
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 DatasetView >> name: aString source: dict keyBlock: aBlock [
 
 	name := aString.
@@ -56,7 +57,7 @@ DatasetView >> name: aString source: dict keyBlock: aBlock [
 	keyBlock := aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 DatasetView >> recordAt: key on: aDictionary [
 
 	source

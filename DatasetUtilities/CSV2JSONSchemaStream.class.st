@@ -1,13 +1,14 @@
 Class {
-	#name : #CSV2JSONSchemaStream,
-	#superclass : #CSV2ObjectStream,
+	#name : 'CSV2JSONSchemaStream',
+	#superclass : 'CSV2ObjectStream',
 	#instVars : [
 		'schema'
 	],
-	#category : #DatasetUtilities
+	#category : 'DatasetUtilities',
+	#package : 'DatasetUtilities'
 }
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2JSONSchemaStream >> convertFromDictionaries: records [
 
 	^ (NeoJSONReader on:
@@ -15,7 +16,7 @@ CSV2JSONSchemaStream >> convertFromDictionaries: records [
 		  schema
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2JSONSchemaStream >> convertFromDictionary: record [
 
 	| json |
@@ -23,13 +24,13 @@ CSV2JSONSchemaStream >> convertFromDictionary: record [
 	^ (NeoJSONReader on: json readStream) nextAs: schema
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2JSONSchemaStream >> nextList [
 
 	^ self nextListAs: schema
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2JSONSchemaStream >> nextListAs: anSchema [
 
 	"	| record row |
@@ -46,7 +47,7 @@ CSV2JSONSchemaStream >> nextListAs: anSchema [
 	^ col
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CSV2JSONSchemaStream >> schema: anObject [
 
 	schema := anObject

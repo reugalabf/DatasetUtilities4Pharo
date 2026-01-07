@@ -1,10 +1,11 @@
 Class {
-	#name : #DictionaryAggregator,
-	#superclass : #DatasetAggregator,
-	#category : #DatasetUtilities
+	#name : 'DictionaryAggregator',
+	#superclass : 'DatasetAggregator',
+	#category : 'DatasetUtilities',
+	#package : 'DatasetUtilities'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 DictionaryAggregator >> computeValueOf: aSymbol from: bulk [
 
 	^ aSymbol = keyAspect

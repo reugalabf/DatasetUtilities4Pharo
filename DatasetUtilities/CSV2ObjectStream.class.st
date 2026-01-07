@@ -2,8 +2,8 @@
 Classes that takes a CSV file and tranform it to Dictionary, JSON or Domain Object (JSONSchema)
 "
 Class {
-	#name : #CSV2ObjectStream,
-	#superclass : #Object,
+	#name : 'CSV2ObjectStream',
+	#superclass : 'Object',
 	#instVars : [
 		'sourceStream',
 		'headers',
@@ -12,10 +12,11 @@ Class {
 		'filteredHeaders',
 		'recordReifyBlock'
 	],
-	#category : #DatasetUtilities
+	#category : 'DatasetUtilities',
+	#package : 'DatasetUtilities'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CSV2ObjectStream class >> source: readStream [
 
 	^ self new
@@ -23,7 +24,7 @@ CSV2ObjectStream class >> source: readStream [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CSV2ObjectStream class >> source: readStream filteredHeaders: array [
 
 	^ self new
@@ -32,7 +33,7 @@ CSV2ObjectStream class >> source: readStream filteredHeaders: array [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CSV2ObjectStream class >> source: readStream filteredHeaders: array recordReifyBlock: aBlock [
 
 	^ self new
@@ -42,13 +43,13 @@ CSV2ObjectStream class >> source: readStream filteredHeaders: array recordReifyB
 		  yourself
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2ObjectStream >> atEnd [
 
 	^ sourceStream atEnd
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2ObjectStream >> contents [
 
 	| col |
@@ -58,31 +59,31 @@ CSV2ObjectStream >> contents [
 	^ self convertFromDictionaries: col
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2ObjectStream >> convertFromDictionaries: records [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2ObjectStream >> convertFromDictionary: record [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CSV2ObjectStream >> filteredHeaders: anObject [
 
 	filteredHeaders := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CSV2ObjectStream >> headers [
 
 	^ headers
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 CSV2ObjectStream >> initialize [
 
 	keyIndex := 0.
@@ -91,14 +92,14 @@ CSV2ObjectStream >> initialize [
 	recordReifyBlock := [ :record | record ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CSV2ObjectStream >> keyColumn: aString filterBlock: aBlock [
 
 	keyIndex := headers indexOf: aString.
 	filterBlock := aBlock
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2ObjectStream >> next [
 
 	| record row |
@@ -122,7 +123,7 @@ CSV2ObjectStream >> next [
 	^ self convertFromDictionary: (recordReifyBlock  value: record)
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2ObjectStream >> nextFilteredRow [
 
 	| row |
@@ -132,19 +133,19 @@ CSV2ObjectStream >> nextFilteredRow [
 	^ row
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CSV2ObjectStream >> recordReifyBlock: anObject [
 
 	recordReifyBlock := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CSV2ObjectStream >> sourceStream [
 
 	^ sourceStream
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CSV2ObjectStream >> sourceStream: anObject [
 
 	sourceStream isNil
@@ -154,7 +155,7 @@ CSV2ObjectStream >> sourceStream: anObject [
 		ifFalse: [ self error: 'Changing source is not allowed' ]
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2ObjectStream >> valueFilterBlockWithRow: aRow [
 
 	^ (keyIndex = 0 or: [ filterBlock value: (aRow at: keyIndex) ])

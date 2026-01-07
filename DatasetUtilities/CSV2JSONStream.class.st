@@ -1,16 +1,17 @@
 Class {
-	#name : #CSV2JSONStream,
-	#superclass : #CSV2ObjectStream,
-	#category : 'DatasetUtilities'
+	#name : 'CSV2JSONStream',
+	#superclass : 'CSV2ObjectStream',
+	#category : 'DatasetUtilities',
+	#package : 'DatasetUtilities'
 }
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2JSONStream >> convertFromDictionaries: records [
 
 	^ NeoJSONWriter toStringPretty: records
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2JSONStream >> convertFromDictionary: record [
 
 	^ NeoJSONWriter toStringPretty: record

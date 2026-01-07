@@ -1,22 +1,23 @@
 Class {
-	#name : #CSV2DictionaryStream,
-	#superclass : #CSV2ObjectStream,
-	#category : 'DatasetUtilities'
+	#name : 'CSV2DictionaryStream',
+	#superclass : 'CSV2ObjectStream',
+	#category : 'DatasetUtilities',
+	#package : 'DatasetUtilities'
 }
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2DictionaryStream >> convertFromDictionaries: records [
 
 	^ records
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2DictionaryStream >> convertFromDictionary: record [
 
 	^ record
 ]
 
-{ #category : #'stream protocol' }
+{ #category : 'stream protocol' }
 CSV2DictionaryStream >> exportContentsAsCSVOn: writeStream [
 
 	| writer |
