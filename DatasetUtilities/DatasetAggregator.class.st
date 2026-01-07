@@ -68,6 +68,18 @@ DatasetAggregator >> addDateMappingFor: aSymbol as: anotherSymbol [
 ]
 
 { #category : 'api' }
+DatasetAggregator >> addDullMappingFor: aSymbol [
+
+	self addDullMappingFor: aSymbol as: #Time
+]
+
+{ #category : 'api' }
+DatasetAggregator >> addDullMappingFor: aSymbol as: anotherSymbol [
+
+	mappings at: aSymbol -> anotherSymbol put: self dullAggregationBlock
+]
+
+{ #category : 'api' }
 DatasetAggregator >> addMaxMappingFor: aSymbol [
 
 	self addMaxMappingFor: aSymbol as: aSymbol
@@ -187,6 +199,7 @@ DatasetAggregator >> aggregateFromStream: readStream [
 	result := SortedCollection sortBlock: [ :a :b | a key < b key ].
 	aggregation associationsDo: [ :each | 
 		each value at: #when put: each key printString.
+		each value at: keyAspect put: each key printString.
 		result add: each ].
 
 	^ result
@@ -341,6 +354,21 @@ DatasetAggregator >> dateSplitBlock [
 		  outReg ] ]
 ]
 
+{ #category : 'private' }
+DatasetAggregator >> dullAggregationBlock [
+
+	^ [ :bulk :outReg :assocKey |
+		  | value |
+
+		  value := self computeValueOf: assocKey key asSymbol from: bulk.
+
+		  outReg
+			  at: assocKey value
+			  ifPresent: [ :v | outReg at: assocKey value put: value ]
+			  ifAbsent: [ outReg at: assocKey value put: value ].
+		  outReg ]
+]
+
 { #category : 'accessing' }
 DatasetAggregator >> filterBlock [
 
@@ -420,7 +448,7 @@ DatasetAggregator >> minAggregationBlock [
 		  outReg
 			  at: assocKey value
 			  ifPresent: [ :v | outReg at: assocKey value put: (value min: v) ]
-			  ifAbsent: [ outReg at: assocKey value put: value ] ].
+			  ifAbsentPut: [ value ] ].
 	  outReg ]
 ]
 

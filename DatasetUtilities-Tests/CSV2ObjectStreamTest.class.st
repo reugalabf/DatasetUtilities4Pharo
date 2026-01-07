@@ -1,10 +1,11 @@
 Class {
-	#name : #CSV2ObjectStreamTest,
-	#superclass : #TestCase,
-	#category : #'DatasetUtilities-Tests'
+	#name : 'CSV2ObjectStreamTest',
+	#superclass : 'TestCase',
+	#category : 'DatasetUtilities-Tests',
+	#package : 'DatasetUtilities-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> completeDataset [
 ^
 'h1,h2,h3
@@ -13,7 +14,7 @@ a2,b2,c2
 a3,b3,c3'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> incompleteDataset1 [
 ^
 'h1,h2,h3
@@ -22,7 +23,7 @@ a2,b2,c2
 a3,b3,c3'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> incompleteDataset2 [
 ^
 'h1,h2,h3
@@ -31,7 +32,7 @@ a2,b2,c2
 a3,b3,c3'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset1 [
 
 	| converter |
@@ -42,7 +43,7 @@ CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset1 [
 	self should: [ converter next  size = 3 ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset1FilteredHeads [
 
 	| converter ws headers |
@@ -59,7 +60,7 @@ CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset1FilteredHeads [
 	self should: [ (headers at: 3) = 'h2' ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset1FilteredWrongHead [
 
 	| converter ws |
@@ -70,7 +71,7 @@ CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset1FilteredWrongHead [
 	self should: [ converter exportContentsAsCSVOn: ws ] raise: Error
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset2 [
 
 	| converter |
@@ -80,7 +81,7 @@ CSV2ObjectStreamTest >> testDictionaryStreamCompleteDataset2 [
 	self should:[ (converter next) size = 3 ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> testDictionaryStreamContentsCompleteDataset2 [
 
 	| converter |
@@ -90,7 +91,7 @@ CSV2ObjectStreamTest >> testDictionaryStreamContentsCompleteDataset2 [
 	self should: [ converter contents size = 3 ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> testDictionaryStreamFilteredCompleteDataset1 [
 
 	| converter |
@@ -103,7 +104,7 @@ CSV2ObjectStreamTest >> testDictionaryStreamFilteredCompleteDataset1 [
 	self should: [converter contents size = 2].
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> testDictionaryStreamWithCompleteDataset [
 
 	| converter |
@@ -113,7 +114,7 @@ CSV2ObjectStreamTest >> testDictionaryStreamWithCompleteDataset [
 	self should:[ (converter next) size = 3 ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> testJsonSchemaStreamCompleteDataset1 [
 
 	| converter |
@@ -124,7 +125,7 @@ CSV2ObjectStreamTest >> testJsonSchemaStreamCompleteDataset1 [
 	self should: [ converter next size = 3 ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> testJsonSchemaStreamContentsCompleteDataset1 [
 
 	| converter |
@@ -137,7 +138,7 @@ CSV2ObjectStreamTest >> testJsonSchemaStreamContentsCompleteDataset1 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> testJsonStreamCompleteDataset1 [
 
 	| converter |
@@ -154,7 +155,7 @@ CSV2ObjectStreamTest >> testJsonStreamCompleteDataset1 [
 	self should: [ converter next isNil ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 CSV2ObjectStreamTest >> testJsonStreamContentsCompleteDataset1 [
 
 	| converter json |

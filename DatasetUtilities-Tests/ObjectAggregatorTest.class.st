@@ -1,17 +1,18 @@
 Class {
-	#name : #ObjectAggregatorTest,
-	#superclass : #DatasetAggregatorTest,
-	#category : #'DatasetUtilities-Tests'
+	#name : 'ObjectAggregatorTest',
+	#superclass : 'DatasetAggregatorTest',
+	#category : 'DatasetUtilities-Tests',
+	#package : 'DatasetUtilities-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 ObjectAggregatorTest >> getCollectionToAggregate [
 
 	^ (NeoJSONReader on: self threeEntriesJson readStream) nextListAs:
 		  FlareSenseDevelopment
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ObjectAggregatorTest >> testHourlyMultiMappingsReification [
 	| col agregator rsp aggregated |
 	rsp := FlareSenseRawEndpointClient new transformJSONFrom:
@@ -39,7 +40,7 @@ ObjectAggregatorTest >> testHourlyMultiMappingsReification [
 	self should: [ (aggregated first value at: #hum) = 70.5 ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ObjectAggregatorTest >> testHourlyMultiMappingsToCSV [
 
 	| col agregator csv array |
@@ -68,7 +69,7 @@ ObjectAggregatorTest >> testHourlyMultiMappingsToCSV [
 	self should: [ ((array at: 2) at: 2) = '70.0' ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ObjectAggregatorTest >> testHourlyMultiMappingsToJSON [
 
 	| col agregator json dicts |
@@ -92,7 +93,7 @@ ObjectAggregatorTest >> testHourlyMultiMappingsToJSON [
 		(dicts first at: 'when') = '2023-11-28T13:00:00+00:00' ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ObjectAggregatorTest >> testMultiMappingsFilter [
 
 	| col agregator rsp aggregated |
@@ -123,7 +124,7 @@ ObjectAggregatorTest >> testMultiMappingsFilter [
 	self should: [ (aggregated first value at: #hum) = 66.7 ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ObjectAggregatorTest >> testMultiMappingsFilterHourly [
 
 	| col agregator rsp aggregated |
@@ -157,7 +158,7 @@ ObjectAggregatorTest >> testMultiMappingsFilterHourly [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ObjectAggregatorTest >> testMultiMappingsReification [
 
 	| col agregator rsp aggregated |
@@ -187,7 +188,7 @@ ObjectAggregatorTest >> testMultiMappingsReification [
 	self should: [ (aggregated first value at: #hum) = 73.3 ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ObjectAggregatorTest >> testSplitDate [
 
 	| col agregator rsp aggregated |
@@ -222,7 +223,7 @@ ObjectAggregatorTest >> testSplitDate [
 	self should: [ (aggregated first value at: #hum) = 66.7 ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 ObjectAggregatorTest >> testTwoBlocksHourlyMappings [
 
 	"25.3,""hum"":73.3,"

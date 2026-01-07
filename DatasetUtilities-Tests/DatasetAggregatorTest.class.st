@@ -1,22 +1,23 @@
 Class {
-	#name : #DatasetAggregatorTest,
-	#superclass : #TestCase,
-	#category : #'DatasetUtilities-Tests'
+	#name : 'DatasetAggregatorTest',
+	#superclass : 'TestCase',
+	#category : 'DatasetUtilities-Tests',
+	#package : 'DatasetUtilities-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetAggregatorTest >> getCollectionToAggregate [
 
 	^ (NeoJSONReader on: self threeEntriesJson readStream) nextListAs:
 		  FlareSenseDevelopment
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregatorTest >> threeEntriesJson [
 ^ '[{"wind_ws_gust":36,"when":"2023-11-28T13:03:38.897Z","timeDeltaM":30,"humidity_ws":69.4,"nodeId":"3c610528e00c","wind_wspeed_s":17.8,"tem":25.3,"hum":73.3,"pressure_ws":1012,"raing":0,"temperature_ws":25.3,"fw":"Miramar-sep2022","wind_direction_ws":0.6},{"wind_ws_gust":11.6,"when":"2023-11-28T13:38:45.393Z","timeDeltaM":30,"humidity_ws":65.5,"nodeId":"3c610528e00c","wind_wspeed_s":4.4,"tem":28.1,"hum":66.7,"pressure_ws":1011.9,"raing":0,"temperature_ws":26.8,"fw":"Miramar-sep2022","wind_direction_ws":0},{"wind_ws_gust":28.8,"when":"2023-11-28T14:08:45.393+00:00","timeDeltaM":30,"humidity_ws":66.3,"nodeId":"3c610528e00c","wind_wspeed_s":14.4,"tem":26.1,"hum":71.6,"pressure_ws":1011.7,"raing":0,"temperature_ws":26.5,"fw":"Miramar-sep2022","wind_direction_ws":1.2}]'
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregatorTest >> twoMultiRawEntriesJson [
 ^ '[{
 "fw": "Miramar-sep2022",
@@ -99,7 +100,7 @@ DatasetAggregatorTest >> twoMultiRawEntriesJson [
 ]'
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 DatasetAggregatorTest >> twoRawEntriesJson [
 ^ '[{
 "fw": "Miramar-sep2022",

@@ -1,10 +1,11 @@
 Class {
-	#name : #DatasetJointerTest,
-	#superclass : #TestCase,
-	#category : #'DatasetUtilities-Tests'
+	#name : 'DatasetJointerTest',
+	#superclass : 'TestCase',
+	#category : 'DatasetUtilities-Tests',
+	#package : 'DatasetUtilities-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> datasetViewH [
 
 	^ (DatasetView
@@ -17,7 +18,7 @@ DatasetJointerTest >> datasetViewH [
 		  yourself
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> datasetViewK [
 
 	^ (DatasetView
@@ -30,7 +31,7 @@ DatasetJointerTest >> datasetViewK [
 		  yourself
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> datasetViewKFull [
 
 	^ (DatasetView
@@ -43,7 +44,7 @@ DatasetJointerTest >> datasetViewKFull [
 		  yourself
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> datasetViewQ [
 
 	^ (DatasetView
@@ -56,7 +57,7 @@ DatasetJointerTest >> datasetViewQ [
 		  yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 DatasetJointerTest >> expectedCSV [
 ^ 'H.b,key,K.r,K.t
 b1,a1,r1, t1
@@ -64,7 +65,7 @@ b1,a1,r1, t1
 b3,a3,r3,t3'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 DatasetJointerTest >> expectedJson [
 ^ '[
 	{
@@ -88,7 +89,7 @@ DatasetJointerTest >> expectedJson [
 ]'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> hCSVDataset [
 ^
 'a,b,c
@@ -97,7 +98,7 @@ a2,b2,c2
 a3,b3,c3'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> kCSVDataset [
 ^
 'a,r,s,t
@@ -106,7 +107,7 @@ a2,r2,s2,t2
 a3,r3,s3,t3'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> qCSVDataset [
 ^
 'a,rr,ss,t_t
@@ -116,7 +117,7 @@ a3,r3,s3,t3
 a4,r4,s4,t4'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> testTwoCompleteDatasets [
 
 	| viewH viewK join |
@@ -134,7 +135,7 @@ DatasetJointerTest >> testTwoCompleteDatasets [
 	self should: [ (join at: 'a1') keys = #( 'H.b' 'key' 'K.r' 'K.t' ) ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> testTwoCompleteDatasetsAsCSV [
 
 	| viewH viewK csv join expectedJoin |
@@ -160,7 +161,7 @@ DatasetJointerTest >> testTwoCompleteDatasetsAsCSV [
 		(expectedJoin := NeoCSVReader on: self expectedCSV readStream) next ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> testTwoCompleteDatasetsAsJson [
 
 	| viewH viewK json |
@@ -176,7 +177,7 @@ DatasetJointerTest >> testTwoCompleteDatasetsAsJson [
 		= (NeoJSONReader on: self expectedJson readStream) next size]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> testTwoCompleteNoMatchRowDatasets [
 
 	| viewH viewQ join |
@@ -194,7 +195,7 @@ DatasetJointerTest >> testTwoCompleteNoMatchRowDatasets [
 	self should: [ (join at: 'a1') keys = #( 'H.b' 'key' 'Q.rr' 'Q.t_t' ) ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DatasetJointerTest >> testTwoIncompleteDatasets [
 
 	| viewQ viewK join |

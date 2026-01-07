@@ -1,10 +1,11 @@
 Class {
-	#name : #DictionaryAggregatorTest,
-	#superclass : #DatasetAggregatorTest,
-	#category : #'DatasetUtilities-Tests'
+	#name : 'DictionaryAggregatorTest',
+	#superclass : 'DatasetAggregatorTest',
+	#category : 'DatasetUtilities-Tests',
+	#package : 'DatasetUtilities-Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 DictionaryAggregatorTest >> getCollection3ToAggregateWithAppends [
 
 	^ (NeoJSONReader on: self threeEntriesWithOneMultiValue readStream) next collect: [ 
@@ -13,7 +14,7 @@ DictionaryAggregatorTest >> getCollection3ToAggregateWithAppends [
 		  each ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DictionaryAggregatorTest >> getCollectionToAggregate [
 
 	^ (NeoJSONReader on: self threeEntriesJson readStream) next collect: [ 
@@ -22,7 +23,7 @@ DictionaryAggregatorTest >> getCollectionToAggregate [
 		  each ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DictionaryAggregatorTest >> getCollectionToAggregateWithAppends [
 
 	^ (NeoJSONReader on: self twoEntriesWithOneMultiValue readStream) next collect: [ 
@@ -31,12 +32,49 @@ DictionaryAggregatorTest >> getCollectionToAggregateWithAppends [
 		  each ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
+DictionaryAggregatorTest >> testHourly [
+	| col agregator agregated|
+	col := self getCollectionToAggregateWithAppends.
+
+	self should: [ col size = 2 ].
+
+	agregator := DictionaryAggregator new.
+	agregator
+		keyAspect: #when;
+		hourly;
+		addMinMappingFor: #lqi_315.
+"		addAppendMappingFor: #lqi_315;
+		addBlockMapping: [ :row | (row at: #lqi_315) average  ] as: #avg_315;"
+"		addAverageMappingFor: #lqi_315 as: #avg_315_2;"
+
+		" 
+		addMaxMappingFor: #wind_ws_gust;
+		addMinMappingFor: #temperature_ws".
+	agregated := agregator halt aggregate: col.
+   agregated inspect.
+	self should: [ agregated size = 1 ].
+	self should: [ 
+		((agregated  first value at: #when) ) = '2025-03-31T22:00:00+00:00' ].
+
+	
+"	self should: [ 
+		((agregated first value at: #lqi_315) notNil )].
+
+	self should: [ 
+		((agregated first value at: #lqi_315) size = 40 )]	.
+			self should: [ 
+		((agregated first value at: #avg_315) notNil )]	
+
+"
+]
+
+{ #category : 'tests' }
 DictionaryAggregatorTest >> testHourlyAppendMappings [
 
 	| col agregator agregated|
 	col := self getCollectionToAggregateWithAppends.
-
+	col halt.
 	self should: [ col size = 2 ].
 
 
@@ -46,13 +84,14 @@ DictionaryAggregatorTest >> testHourlyAppendMappings [
 		keyAspect: #when;
 		hourly;
 		addAppendMappingFor: #lqi_315;
-		addBlockMapping: [ :row | (row at: #lqi_315) average  ] as: #avg_315
-		";
-		addSumMappingFor: #tem;
+		addBlockMapping: [ :row | (row at: #lqi_315) average  ] as: #avg_315;
+"		addAverageMappingFor: #lqi_315 as: #avg_315_2;"
+		addSumMappingFor: #lqi_315.
+		" 
 		addMaxMappingFor: #wind_ws_gust;
-		addMinMappingFor: #temperature_ws".
+		addMinMappingFor: #temperature_ws"
 	agregated := agregator aggregate: col.
-
+   agregated inspect.
 	self should: [ agregated size = 1 ].
 	self should: [ 
 		((agregated  first value at: #when) ) = '2025-03-31T22:00:00+00:00' ].
@@ -69,7 +108,7 @@ DictionaryAggregatorTest >> testHourlyAppendMappings [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DictionaryAggregatorTest >> testHourlyAppendMappingsIntoDataset [
 
 	| col agregator agregated dtView|
@@ -115,7 +154,7 @@ dtView :=
 	self should:[(dtView asDictionarySource first at: #avg_315) = (79/2)]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DictionaryAggregatorTest >> testHourlyMultiMappings [
 
 	| col agregator result|
@@ -142,7 +181,7 @@ DictionaryAggregatorTest >> testHourlyMultiMappings [
 		((result first value at: #hum) notNil )]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DictionaryAggregatorTest >> testMultiMappingsFilter [
 
 	| col agregator rsp aggregated |
@@ -170,7 +209,7 @@ DictionaryAggregatorTest >> testMultiMappingsFilter [
 	self should: [ (aggregated first value at: #hum) = 66.7 ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DictionaryAggregatorTest >> testTwoHourlyAppendMappingsIntoDataset [
 
 	| col agregator agregated dtView|
@@ -219,7 +258,7 @@ dtView :=
 	self should:[(dtView asDictionarySource last at: #avg_315) = 39.5]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 DictionaryAggregatorTest >> threeEntriesWithOneMultiValue [
 ^'[{
 "fw": "Miramar-Apr2024",
@@ -1033,7 +1072,7 @@ DictionaryAggregatorTest >> threeEntriesWithOneMultiValue [
 }	]'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 DictionaryAggregatorTest >> twoEntriesWithOneMultiValue [
 ^'[{
 "fw": "Miramar-Apr2024",

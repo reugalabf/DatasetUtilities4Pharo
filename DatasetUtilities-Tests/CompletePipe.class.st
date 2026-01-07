@@ -6,7 +6,8 @@
 
 "
 Class {
-	#name : #CompletePipe,
-	#superclass : #TestCase,
-	#category : #'DatasetUtilities-Tests'
+	#name : 'CompletePipe',
+	#superclass : 'TestCase',
+	#category : 'DatasetUtilities-Tests',
+	#package : 'DatasetUtilities-Tests'
 }
