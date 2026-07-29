@@ -169,3 +169,21 @@ CSV2ObjectStreamTest >> testJsonStreamContentsCompleteDataset1 [
 
 	self should: [ (NeoJSONReader on: json readStream) next notNil ]
 ]
+
+{ #category : 'tests' }
+CSV2ObjectStreamTest >> testSkipOnDictionaryStreamCompleteDataset1 [
+
+	| converter |
+	converter := CSV2DictionaryStream source:
+		             (ReadStream on: self incompleteDataset1).
+
+	self should: [ converter headers size = 3 ].
+	self should: [ converter next  size = 3 ].
+	self should:[converter skip: 1].
+	self should: [ (converter next  at:#h1) = 'a3'  ].
+	self shouldnt: [converter skip: 2].
+	self should: [converter skip: 0].
+	self should: [converter skip: -1] raise: AssertionFailure .
+	
+	
+]

@@ -108,19 +108,14 @@ CSV2ObjectStream >> next [
 	row ifNil: [ ^ nil ].
 	record := Dictionary new.
 
-	filteredHeaders do: [ :each | 
-		(headers includes: each)
-			ifFalse: [ self error: 'Missing header' ]
-			ifTrue: [ 
-			record at: each asSymbol put: (row at: (headers indexOf: each)) ] ].
+	filteredHeaders do: [ :each |
+			(headers includes: each)
+				ifFalse: [ self error: 'Missing header' ]
+				ifTrue: [
+				record at: each asSymbol put: (row at: (headers indexOf: each)) ] ].
 
 
-	"	1 to: headers size do: [ :idx | 
-		(filteredHeaders isNil or: [ 
-			 filteredHeaders includes: (headers at: idx) ])
-			ifFalse: [ self error: 'Missing header' ]
-			ifTrue: [ record at: (headers at: idx) asSymbol put: (row at: idx) ] ]."
-	^ self convertFromDictionary: (recordReifyBlock  value: record)
+	^ self convertFromDictionary: (recordReifyBlock value: record)
 ]
 
 { #category : 'stream protocol' }
@@ -137,6 +132,17 @@ CSV2ObjectStream >> nextFilteredRow [
 CSV2ObjectStream >> recordReifyBlock: anObject [
 
 	recordReifyBlock := anObject
+]
+
+{ #category : 'stream protocol' }
+CSV2ObjectStream >> skip: integer [
+
+	self assert: [ integer >= 0 ].
+	integer timesRepeat: [
+			self atEnd
+				ifFalse: [ self next ]
+				ifTrue: [ ^ false ] ].
+	^ true
 ]
 
 { #category : 'accessing' }
