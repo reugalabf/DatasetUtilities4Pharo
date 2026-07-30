@@ -1,10 +1,11 @@
 Class {
-	#name : #BaselineOfDatasetUtilities,
-	#superclass : #BaselineOf,
-	#category : 'BaselineOfDatasetUtilities'
+	#name : 'BaselineOfDatasetUtilities',
+	#superclass : 'BaselineOf',
+	#category : 'BaselineOfDatasetUtilities',
+	#package : 'BaselineOfDatasetUtilities'
 }
 
-{ #category : #baselines }
+{ #category : 'baselines' }
 BaselineOfDatasetUtilities >> baseline: spec [
 
 	<baseline>
@@ -23,7 +24,7 @@ BaselineOfDatasetUtilities >> baseline: spec [
 				group: 'default' with: #( 'Core' 'Tests' ) ]
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 BaselineOfDatasetUtilities >> neoBaselines: spec [
 
 	spec
@@ -35,10 +36,10 @@ BaselineOfDatasetUtilities >> neoBaselines: spec [
 		with: [ spec repository: 'github://svenvc/NeoCSV/repository' ]
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 BaselineOfDatasetUtilities >> ztimestampBaseline: spec [
 
-	spec baseline: 'ztimestamp' with: [ 
+	spec baseline: 'ZTimestamp' with: [ 
 		spec
 			loads: #( 'common' );
 			repository: 'https://github.com/svenvc/ztimestamp.git' ]
