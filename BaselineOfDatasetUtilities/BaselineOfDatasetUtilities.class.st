@@ -15,7 +15,7 @@ BaselineOfDatasetUtilities >> baseline: spec [
 				ztimestampBaseline: spec.
 			spec
 				package: #DatasetUtilities 
-				with: [ spec requires: #( 'NeoJSON' 'NeoJSON' 'ztimestamp' ) ];
+				with: [ spec requires: #( 'NeoJSON' 'NeoJSON' 'ZTimestamp' ) ];
 				package: #'DatasetUtilities-Tests' 
 				with: [ spec requires: #( 'DatasetUtilities' ) ].
 			spec
