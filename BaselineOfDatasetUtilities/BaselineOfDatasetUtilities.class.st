@@ -15,7 +15,7 @@ BaselineOfDatasetUtilities >> baseline: spec [
 				ztimestampBaseline: spec.
 			spec
 				package: #DatasetUtilities 
-				with: [ spec requires: #( 'NeoJSON' 'NeoCSV' 'ztimestamp' ) ];
+				with: [ spec requires: #( 'NeoJSON' 'NeoCSV' 'ZTimestamp' ) ];
 				package: #'DatasetUtilities-Tests' 
 				with: [ spec requires: #( 'DatasetUtilities' ) ].
 			spec
@@ -39,13 +39,13 @@ BaselineOfDatasetUtilities >> neoBaselines: spec [
 { #category : 'utilities' }
 BaselineOfDatasetUtilities >> ztimestampBaseline: spec [
 
-	spec
+	"spec
 		package: 'ztimestamp'
-		with: [ spec repository: 'https://github.com/svenvc/ztimestamp.git' ]
+		with: [ spec repository: 'https://github.com/svenvc/ztimestamp.git' ]"
 
 	
-	"spec baseline: 'ZTimestamp' with: [ 
+	spec baseline: 'ZTimestamp' with: [ 
 		spec
 			loads: #( 'common' );
-			repository: 'https://github.com/svenvc/ztimestamp.git' ]"
+			repository: 'git@github.com:svenvc/ztimestamp.git' ]
 ]
