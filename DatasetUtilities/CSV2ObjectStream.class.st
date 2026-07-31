@@ -118,7 +118,7 @@ CSV2ObjectStream >> next [
 	^ self convertFromDictionary: (recordReifyBlock value: record)
 ]
 
-{ #category : 'stream protocol' }
+{ #category : 'private' }
 CSV2ObjectStream >> nextFilteredRow [
 
 	| row |
@@ -126,6 +126,13 @@ CSV2ObjectStream >> nextFilteredRow [
 	[ sourceStream atEnd or: [ row notNil ] ] whileFalse: [ 
 		row := self valueFilterBlockWithRow: sourceStream next ].
 	^ row
+]
+
+{ #category : 'private' }
+CSV2ObjectStream >> nextRaw [
+
+	sourceStream atEnd ifTrue: [ ^ nil ].
+	^ self nextFilteredRow
 ]
 
 { #category : 'accessing' }
@@ -140,7 +147,7 @@ CSV2ObjectStream >> skip: integer [
 	self assert: [ integer >= 0 ].
 	integer timesRepeat: [
 			self atEnd
-				ifFalse: [ self next ]
+				ifFalse: [ self nextRaw ]
 				ifTrue: [ ^ false ] ].
 	^ true
 ]
@@ -161,10 +168,8 @@ CSV2ObjectStream >> sourceStream: anObject [
 		ifNotNil: [ self error: 'Changing source is not allowed' ]
 ]
 
-{ #category : 'stream protocol' }
+{ #category : 'private' }
 CSV2ObjectStream >> valueFilterBlockWithRow: aRow [
 
-	^ (keyIndex = 0 or: [ filterBlock value: (aRow at: keyIndex) ])
-		  ifTrue: [ aRow ]
-		  ifFalse: [ nil ]
+	^ (keyIndex = 0 or: [ filterBlock value: (aRow at: keyIndex) ]) ifTrue: [ aRow ]
 ]
