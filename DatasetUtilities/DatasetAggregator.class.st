@@ -429,7 +429,7 @@ DatasetAggregator >> maxAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := self computeValueOf: assocKey key asSymbol from: bulk.
+	  value := Number readFrom:(self computeValueOf: assocKey key asSymbol from: bulk).
 	  value isNumber ifTrue: [ 
 		  outReg
 			  at: assocKey value
@@ -442,14 +442,23 @@ DatasetAggregator >> maxAggregationBlock [
 DatasetAggregator >> minAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
+
 	  | value |
-	  value := self computeValueOf: assocKey key asSymbol from: bulk.
+	  value := Number readFrom: (self computeValueOf: assocKey key asSymbol from: bulk).
 	  value isNumber ifTrue: [ 
 		  outReg
 			  at: assocKey value
-			  ifPresent: [ :v | outReg at: assocKey value put: (value min: v) ]
-			  ifAbsentPut: [ value ] ].
+			  ifPresent: [ :v | 
+				  v ifNotNil: [ 
+					  outReg at: assocKey value put: (value min:v );
+							   yourself ] ]
+			  ifAbsent: [ 
+				  value ifNotNil: [ 
+					  outReg at: assocKey value put:  
+							  value.
+							   ] ] ].
 	  outReg ]
+
 ]
 
 { #category : 'private' }
@@ -470,7 +479,7 @@ DatasetAggregator >> sumAggregationBlock [
 
 	^ [ :bulk :outReg :assocKey | 
 	  | value |
-	  value := self computeValueOf: assocKey key asSymbol from: bulk.
+	  value := Number readFrom: (self computeValueOf: assocKey key asSymbol from: bulk).
 	  value isNumber ifTrue: [ 
 		  outReg
 			  at: assocKey value

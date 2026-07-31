@@ -5,7 +5,7 @@ Class {
 	#package : 'DatasetUtilities-Tests'
 }
 
-{ #category : 'tests' }
+{ #category : 'resources' }
 DatasetJointerTest >> datasetViewH [
 
 	^ (DatasetView
@@ -18,7 +18,7 @@ DatasetJointerTest >> datasetViewH [
 		  yourself
 ]
 
-{ #category : 'tests' }
+{ #category : 'resources' }
 DatasetJointerTest >> datasetViewK [
 
 	^ (DatasetView
@@ -31,7 +31,7 @@ DatasetJointerTest >> datasetViewK [
 		  yourself
 ]
 
-{ #category : 'tests' }
+{ #category : 'resources' }
 DatasetJointerTest >> datasetViewKFull [
 
 	^ (DatasetView
@@ -44,7 +44,7 @@ DatasetJointerTest >> datasetViewKFull [
 		  yourself
 ]
 
-{ #category : 'tests' }
+{ #category : 'resources' }
 DatasetJointerTest >> datasetViewQ [
 
 	^ (DatasetView
@@ -57,7 +57,7 @@ DatasetJointerTest >> datasetViewQ [
 		  yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'resources' }
 DatasetJointerTest >> expectedCSV [
 ^ 'H.b,key,K.r,K.t
 b1,a1,r1, t1
@@ -65,7 +65,7 @@ b1,a1,r1, t1
 b3,a3,r3,t3'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'resources' }
 DatasetJointerTest >> expectedJson [
 ^ '[
 	{
@@ -89,7 +89,7 @@ DatasetJointerTest >> expectedJson [
 ]'
 ]
 
-{ #category : 'tests' }
+{ #category : 'resources' }
 DatasetJointerTest >> hCSVDataset [
 ^
 'a,b,c
@@ -98,7 +98,7 @@ a2,b2,c2
 a3,b3,c3'
 ]
 
-{ #category : 'tests' }
+{ #category : 'resources' }
 DatasetJointerTest >> kCSVDataset [
 ^
 'a,r,s,t
@@ -107,7 +107,7 @@ a2,r2,s2,t2
 a3,r3,s3,t3'
 ]
 
-{ #category : 'tests' }
+{ #category : 'resources' }
 DatasetJointerTest >> qCSVDataset [
 ^
 'a,rr,ss,t_t
