@@ -44,8 +44,13 @@ BaselineOfDatasetUtilities >> ztimestampBaseline: spec [
 		with: [ spec repository: 'https://github.com/svenvc/ztimestamp.git' ]"
 
 	
-	spec baseline: 'ZTimestamp' with: [ 
+"	spec baseline: 'ZTimestamp' with: [ 
 		spec
 			loads: #( 'common' );
 			repository: 'git@github.com:svenvc/ztimestamp.git' ]
+		."
+		
+	spec
+		baseline: 'ZTimestamp'
+		with: [ spec repository: 'https://github.com/svenvc/ztimestamp.git' ]
 ]
