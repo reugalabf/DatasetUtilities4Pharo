@@ -78,6 +78,12 @@ CSV2ObjectStream >> filteredHeaders: anObject [
 ]
 
 { #category : 'accessing' }
+CSV2ObjectStream >> getDataSource [ 
+
+^sourceStream getDataSource
+]
+
+{ #category : 'accessing' }
 CSV2ObjectStream >> headers [
 
 	^ headers
@@ -90,6 +96,12 @@ CSV2ObjectStream >> initialize [
 	filterBlock := [ :row | true ].
 	filteredHeaders := Array new.
 	recordReifyBlock := [ :record | record ]
+]
+
+{ #category : 'testing' }
+CSV2ObjectStream >> isFileSource [
+
+	^ sourceStream isFileSource
 ]
 
 { #category : 'accessing' }
