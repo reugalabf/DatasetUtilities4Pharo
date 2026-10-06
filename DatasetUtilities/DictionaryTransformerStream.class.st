@@ -30,6 +30,12 @@ DictionaryTransformerStream >> initialize [
 	^self
 ]
 
+{ #category : 'testing' }
+DictionaryTransformerStream >> isFileSource [
+
+	^ source isFileSource
+]
+
 { #category : 'accessing' }
 DictionaryTransformerStream >> next [
 
